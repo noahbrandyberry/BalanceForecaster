@@ -1,0 +1,11 @@
+<nav class="site-navigation">
+    <div class="grid-container">
+        <% if user_signed_in? %>
+            <%= render 'logged_in_nav' %>
+        <% else %>
+            <%= render 'logged_out_nav' %>
+        <% end %>
+    </div>
+</nav>
+
+<%= render 'flash_messages' %>

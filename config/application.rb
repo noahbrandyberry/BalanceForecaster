@@ -15,5 +15,17 @@ module BalanceForecaster
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+    config.action_view.field_error_proc = Proc.new do |html_tag, instance|
+      elements = Nokogiri::HTML::DocumentFragment.parse(html_tag).css 'label'
+      if elements.first
+        html_tag
+      else
+        if instance.error_message.kind_of?(Array)
+          %(#{html_tag}<p class="help-text error-message">#{@name} #{instance.error_message[0]} #{if instance.error_message[1] then "and " + instance.error_message[1] end} </p>).html_safe
+        else
+          %(#{html_tag}<p class="help-text error-message">#{@name} #{instance.error_message}</p>).html_safe
+        end
+      end
+    end
   end
 end

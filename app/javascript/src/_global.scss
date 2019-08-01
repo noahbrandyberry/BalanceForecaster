@@ -1,0 +1,16 @@
+.session-links {
+    a ~ a {
+        &:before {
+            content: '|';
+            padding-left: 0.25rem;
+            padding-right: 0.5rem;
+            color: $black;
+        }
+    }
+}
+
+.flash-message {
+    p {
+        margin: 0;
+    }
+}

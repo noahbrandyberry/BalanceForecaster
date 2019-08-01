@@ -1,0 +1,65 @@
+<%= form_for(@item, url: url) do |f| %>
+    <div class="field">
+        <%= f.label :name %>
+        <%= f.text_field :name, autofocus: true %>
+    </div>
+
+    <div class="field">
+        <%= f.label :amount %>
+        <%= f.number_field :amount, step: :any %>
+    </div>
+
+    <div class="field">
+        <%= f.label :is_bill %>
+        <%= f.check_box :is_bill %>
+    </div>
+
+    <div class="field">
+        <%= f.label :repeat %>
+        <%= f.check_box :repeat %>
+    </div>
+
+    <div class="field">
+        <%= f.label :repeat_frequency %>
+        <%= f.number_field :repeat_frequency %>
+    </div>
+
+    <div class="field">
+        <%= f.label :repeat_type %>
+        <%= f.select :repeat_type, Item.repeat_types.keys.map { |w| [w.humanize, w] } %>
+    </div>
+
+    <div class="field">
+        <%= f.label :is_transfer %>
+        <%= f.check_box :is_transfer %>
+    </div>
+
+    <div class="field">
+        <%= f.label :transfer_id %>
+        <%= f.select :transfer_id, [] %>
+    </div>
+
+    <div class="field">
+        <%= f.label :start_date %>
+        <%= f.date_field :start_date %>
+    </div>
+
+    <div class="field">
+        <%= f.label :end_date %>
+        <%= f.date_field :end_date %>
+    </div>
+
+    <div class="field">
+        <%= f.label :category_id %>
+        <%= f.select :category_id, [] %>
+    </div>
+
+    <div class="field">
+        <%= f.label :note %>
+        <%= f.text_field :note %>
+    </div>
+
+    <div class="actions">
+        <%= f.submit "Submit", class: 'button' %>
+    </div>
+<% end %>

@@ -1,0 +1,37 @@
+<div class="grid-x align-center">
+    <div class="cell large-8">
+        <div class="grid-x">
+            <div class="cell auto">
+                <h1>Accounts</h1>
+            </div>
+            <div class="cell shrink">
+                <%= link_to 'New', new_account_path %>
+            </div>
+        </div>
+
+        <div class="grid-x align-center grid-padding-y medium-up-3">
+            <div class="cell">
+                <b>Name</b>
+            </div>
+            <div class="cell">
+                <b>Balance</b>
+            </div>
+            <div class="cell">
+                <b>Actions</b>
+            </div>
+        </div>
+        <% @accounts.each do |account| %>
+            <div class="grid-x align-center grid-padding-y medium-up-3">
+                <div class="cell">
+                    <%= account.name %>
+                </div>
+                <div class="cell">
+                    <%= number_to_currency(account.balance) %>
+                </div>
+                <div class="cell">
+                    <%= link_to 'Edit', edit_account_path(account) %> | <%= link_to 'Delete', account_path(account), method: :delete %>
+                </div>
+            </div>
+        <% end %>
+    </div>
+</div>
