@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_01_022737) do
+ActiveRecord::Schema.define(version: 2019_08_06_015821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,20 +23,25 @@ ActiveRecord::Schema.define(version: 2019_08_01_022737) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "categories", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.integer "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "items", force: :cascade do |t|
     t.integer "account_id"
     t.string "name", default: "", null: false
     t.boolean "is_bill", default: false, null: false
     t.boolean "repeat", default: false, null: false
-    t.integer "repeat_frequency"
-    t.integer "repeat_type"
+    t.integer "repeat_frequency", default: 1
+    t.integer "repeat_type", default: 2
     t.decimal "amount", precision: 8, scale: 2, default: "0.0"
     t.date "start_date", null: false
     t.date "end_date"
     t.text "note"
     t.integer "category_id"
-    t.boolean "is_transfer", default: false, null: false
-    t.integer "transfer_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

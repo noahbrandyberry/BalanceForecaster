@@ -11,8 +11,49 @@ require("channels")
 import "foundation-sites"
 require("src/application")
 
+function greaterThanValidator($el, required, parent) {
+  if (!required) return true;
+  var from = $el.data('greater-than');
+  var to = $el.val();
+
+  return (parseInt(to) > parseInt(from));
+};
+
+function toggleHiddenField(e, speed = 500) {
+  var true_ids = e.data('toggle-true') ? "#" + e.data('toggle-true').split(' ').join(', #') : null;
+  var false_ids = e.data('toggle-false') ? "#" + e.data('toggle-false').split(' ').join(', #') : null;
+  
+  toggleField(true_ids, e.is(":checked"), speed)
+  toggleField(false_ids, !e.is(":checked"), speed)
+}
+
+function toggleField(ids, show, global_speed) {
+  $(ids).each(function() {
+    var speed = $(this).is('label') ? 0 : global_speed;
+    console.log(speed)
+
+    if (show) {
+      speed === 0 ? $(this).show() : $(this).slideDown(speed)
+      $(this).find('input, select, textarea').removeAttr('data-abide-ignore')
+    } else {
+      speed === 0 ? $(this).hide() : $(this).slideUp(speed)
+      $(this).find('input, select, textarea').attr('data-abide-ignore', 'true')
+    }
+  });
+}
+
 $(document).on('turbolinks:load', function() {
+  Foundation.Abide.defaults.validators['greater_than'] = greaterThanValidator;
+
   $(document).foundation()
+
+  $('input[type="checkbox"].toggle-fields').each(function() {
+    toggleHiddenField($(this), 0);
+  });
+
+  $('body').on('change', 'input[type="checkbox"].toggle-fields', function() {
+    toggleHiddenField($(this));
+  });
 });
 
 // Uncomment to copy all static images under ../images to the output folder and reference

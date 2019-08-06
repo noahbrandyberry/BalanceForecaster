@@ -2,10 +2,12 @@
   <div class="top-bar-left">
     <ul class="dropdown menu" data-dropdown-menu>
       <li><%= link_to "Accounts", accounts_path %></li>
-      <li><%= link_to "Items", '' %></li>
-      <li><a href="#">Forecast</a></li>
-      <li><a href="#">Calendar</a></li>
-      <li><a href="#">Categories</a></li>
+      <% if params[:account_id] %>
+        <li><%= link_to "Items", account_items_path %></li>
+        <li><a href="#">Forecast</a></li>
+        <li><a href="#">Calendar</a></li>
+        <li><a href="#">Categories</a></li>
+      <% end %>
     </ul>
   </div>
   <div class="top-bar-right">

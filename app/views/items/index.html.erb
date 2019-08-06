@@ -23,10 +23,10 @@
         <b>Amount</b>
     </div>
     <div class="cell large-2">
-        <b>Repeating</b>
+        <b>Repeats</b>
     </div>
     <div class="cell large-1">
-        <b>Repeating</b>
+        <b>Actions</b>
     </div>
 </div>
 <% @items.each do |item| %>
@@ -47,7 +47,7 @@
             <%= number_to_currency(item.amount) %>
         </div>
         <div class="cell large-2">
-            <%= item.repeat ? 'Repeat' : '' %>
+            <%= item.display_repeat_details %>
         </div>
         <div class="cell large-1">
             <%= link_to 'Edit', edit_account_item_path(@account, item) %> | <%= link_to 'Delete', account_item_path(@account, item), method: :delete %>
