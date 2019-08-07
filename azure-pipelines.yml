@@ -9,12 +9,15 @@ trigger:
 pool:
   vmImage: macOS-10.13
   variables:
-    BACKEND: sqlite
+    BACKEND: postgres
   setup:
     - bash: |
         brew update &&
-        brew install sqlite
-      displayName: Install sqlite
+        brew install postgres &&
+        brew services start postgres &&
+        sleep 3 &&
+        /usr/local/opt/postgres/bin/createuser -s balanceforecaster
+      displayName: Install postgresql
 
 steps:
 - task: UseRubyVersion@0
@@ -23,8 +26,8 @@ steps:
 
 - script: |
     gem install bundler
-    bundle install --without development production --retry=3 --jobs=4
-  displayName: 'bundle install --without development production'
+    bundle install --retry=3 --jobs=4
+  displayName: 'bundle install'
 
 - script: bundle exec rake
   displayName: 'bundle exec rake'
