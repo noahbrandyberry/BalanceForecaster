@@ -16,7 +16,7 @@ steps:
 
 - script: |
     gem install bundler
-    bundle install --retry=3 --jobs=4
+    bundle install --without development production --retry=3 --jobs=4
   displayName: 'bundle install --without development production'
 
 - script: bundle exec rake
