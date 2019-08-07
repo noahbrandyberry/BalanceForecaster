@@ -22,6 +22,7 @@ gem 'jbuilder', '~> 2.7'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
+gem 'pg'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
@@ -36,10 +37,6 @@ group :development, :test do
   gem 'rspec_junit_formatter'
 end
 
-group :development, :production do
-  gem 'pg'
-end
-
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 3.3.0'
@@ -51,7 +48,6 @@ end
 
 group :test do
   # Adds support for Capybara system testing and selenium driver
-  gem 'sqlite3'
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
