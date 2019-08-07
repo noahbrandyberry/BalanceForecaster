@@ -6,16 +6,18 @@
 trigger:
 - master
 
-displayName: macOS SQLite
-vmImage: macOS-10.13
-variables:
-  BACKEND: sqlite
-  SQLITE_DATABASE_URL: /tmp/test.db
-setup:
-  - bash: |
-      brew update &&
-      brew install sqlite
-    displayName: Install sqlite
+pool:
+  name: macOS_sqlite
+  displayName: macOS SQLite
+  vmImage: macOS-10.13
+  variables:
+    BACKEND: sqlite
+    SQLITE_DATABASE_URL: /tmp/test.db
+  setup:
+    - bash: |
+        brew update &&
+        brew install sqlite
+      displayName: Install sqlite
 
 steps:
 - task: UseRubyVersion@0
