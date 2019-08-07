@@ -1,16 +1,22 @@
 <%= form_for(@item, url: url, html: {novalidate: "novalidate", data: {abide: ''}}) do |f| %>
+    <div class="field">
+        <%= f.label :name %>
+        <%= f.text_field :name, autofocus: true, required: true %>
+    </div>
+     
     <div class="grid-x grid-margin-x">
         <div class="cell large-6">
             <div class="field">
-                <%= f.label :name %>
-                <%= f.text_field :name, autofocus: true, required: true %>
+                <%= f.label :category_id %>
+                <%= f.select :category_id, [["New Category", "new"]], {prompt: "-- Select Category --"} %>
             </div>
         </div>
 
         <div class="cell large-6">
             <div class="field">
-                <%= f.label :category_id %>
-                <%= f.select :category_id, [], {prompt: "-- Select Category --"} %>
+                <%= label_tag :new_category %>
+                <%= text_field_tag :new_category, '', autofocus: true, required: true %>
+                <p class="form-error">New category can't be blank</p>
             </div>
         </div>
     </div>
