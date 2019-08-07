@@ -10,6 +10,8 @@ pool:
   vmImage: macOS-10.13
   variables:
     BACKEND: postgres
+    PG_DATABASE_URL: postgres://balanceforecaster@localhost/
+    PG_EXAMPLE_DATABASE_URL: postgres://balanceforecaster@localhost/balanceforecaster_test
   setup:
     - bash: |
         brew update &&
