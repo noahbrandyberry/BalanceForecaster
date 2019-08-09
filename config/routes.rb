@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :accounts do
     resources :items
+    get '/forecast', to: 'items#forecast', as: 'forecast'
   end
 
   root 'home#index'

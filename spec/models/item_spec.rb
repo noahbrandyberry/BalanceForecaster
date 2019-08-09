@@ -88,4 +88,31 @@ RSpec.describe Item, type: :model do
       expect(subject).to_not be_valid
     end
   end
+
+  context 'occurrences' do
+    it "returns correct daily occurences" do
+      item = items(:daily_recurring)
+      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date)).to eq(["2019-08-29".to_date, "2019-08-30".to_date, "2019-08-31".to_date])
+    end
+
+    it "returns correct biweekly occurences" do
+      item = items(:biweekly_recurring)
+      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date)).to eq(["2019-08-02".to_date, "2019-08-16".to_date, "2019-08-30".to_date])
+    end
+
+    it "returns correct monthly occurences" do
+      item = items(:monthly_recurring)
+      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date)).to eq(["2019-08-24".to_date])
+    end
+
+    it "returns single occurrence when non recurring" do
+      item = items(:single)
+      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date)).to eq(["2019-08-20".to_date])
+    end
+
+    it "returns correct occurences with end date" do
+      item = items(:daily_recurring)
+      expect(item.occurrences_between("2019-10-01".to_date.."2019-10-31".to_date)).to eq(["2019-10-01".to_date, "2019-10-02".to_date])
+    end
+  end
 end

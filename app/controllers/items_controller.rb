@@ -50,6 +50,10 @@ class ItemsController < ApplicationController
     end
   end
 
+  def forecast
+    # @items = @account.items
+  end
+
   private
     def set_account
       @account = Account.find(params[:account_id])
