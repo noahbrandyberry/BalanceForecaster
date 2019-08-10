@@ -2,6 +2,14 @@
 
 @import '~foundation-sites/scss/foundation';
 @import '~motion-ui/motion-ui';
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~tooltipster/dist/css/tooltipster.bundle';
+@import '~tooltipster/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min';
+@import '~air-datepicker/dist/css/datepicker.min';
 
 
 @include foundation-global-styles;
@@ -39,7 +47,7 @@
 @include foundation-tabs;
 @include foundation-thumbnail;
 @include foundation-title-bar;
-@include foundation-tooltip;
+// @include foundation-tooltip;
 @include foundation-top-bar;
 @include foundation-visibility-classes;
 @include foundation-float-classes;

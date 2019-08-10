@@ -22,6 +22,7 @@ biweekly_recurring:
   repeat: true
   repeat_frequency: 2
   repeat_type: 1
+  end_date: 2019-10-2
 
 monthly_recurring:
   account: checking

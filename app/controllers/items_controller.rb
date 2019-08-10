@@ -1,9 +1,11 @@
 class ItemsController < ApplicationController
   before_action :set_account
   before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :create_or_find_category, only: [:create, :update]
 
   def index
-    @items = @account.items
+    @items = @account.items.future
+    @past_items = @account.items.past
   end
 
   def show
@@ -61,6 +63,12 @@ class ItemsController < ApplicationController
 
     def set_item
       @item = @account.items.find(params[:id])
+    end
+
+    def create_or_find_category
+      if params[:item][:category_id] === "new"
+        params[:item][:category_id] = Category.find_or_create_by(name: params[:new_category], user: @account.user).try(:id)
+      end
     end
 
     def item_params

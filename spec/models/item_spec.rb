@@ -114,5 +114,94 @@ RSpec.describe Item, type: :model do
       item = items(:daily_recurring)
       expect(item.occurrences_between("2019-10-01".to_date.."2019-10-31".to_date)).to eq(["2019-10-01".to_date, "2019-10-02".to_date])
     end
+
+    it "returns correct occurences with biweekly end date" do
+      item = items(:biweekly_recurring)
+      expect(item.occurrences_between("2019-09-01".to_date.."2019-10-31".to_date)).to eq(["2019-09-13".to_date, "2019-09-27".to_date])
+    end
+  end
+
+  context 'first_occurence_after' do
+    it "returns correct daily occurrence" do
+      item = items(:daily_recurring)
+      expect(item.first_occurence_after("2019-08-01".to_date)).to eq("2019-08-29".to_date)
+    end
+
+    it "returns correct biweekly occurrence" do
+      item = items(:biweekly_recurring)
+      expect(item.first_occurence_after("2019-08-01".to_date)).to eq("2019-08-02".to_date)
+    end
+
+    it "returns correct monthly occurrence" do
+      item = items(:monthly_recurring)
+      expect(item.first_occurence_after("2019-08-01".to_date)).to eq("2019-08-24".to_date)
+    end
+
+    it "returns single occurrence when non recurring" do
+      item = items(:single)
+      expect(item.first_occurence_after("2019-08-01".to_date)).to eq("2019-08-20".to_date)
+    end
+
+    it "returns correct occurrence before end date" do
+      item = items(:daily_recurring)
+      expect(item.first_occurence_after("2019-10-01".to_date)).to eq("2019-10-01".to_date)
+    end
+
+    it "returns correct occurence on end date" do
+      item = items(:daily_recurring)
+      expect(item.first_occurence_after("2019-10-02".to_date)).to eq("2019-10-02".to_date)
+    end
+
+    it "returns no occurence after end date" do
+      item = items(:daily_recurring)
+      expect(item.first_occurence_after("2019-10-03".to_date)).to eq(nil)
+    end
+
+    it "returns correct occurence after rounding" do
+      item = items(:biweekly_recurring)
+      expect(item.first_occurence_after("2019-09-20".to_date)).to eq("2019-09-27".to_date)
+    end
+  end
+
+  context 'last_occurence_before' do
+    it "returns no occurrence before start date when recurring" do
+      item = items(:daily_recurring)
+      expect(item.last_occurence_before("2019-08-01".to_date)).to eq(nil)
+    end
+
+    it "returns correct occurrence after start date when recurring" do
+      item = items(:daily_recurring)
+      expect(item.last_occurence_before("2019-08-31".to_date)).to eq("2019-08-31".to_date)
+    end
+
+    it "returns no occurrence before start date when non recurring" do
+      item = items(:single)
+      expect(item.last_occurence_before("2019-08-01".to_date)).to eq(nil)
+    end
+
+    it "returns correct occurrence after start date when non recurring" do
+      item = items(:single)
+      expect(item.last_occurence_before("2019-09-01".to_date)).to eq("2019-08-20".to_date)
+    end
+
+    it "returns correct occurrence before end date" do
+      item = items(:daily_recurring)
+      expect(item.last_occurence_before("2019-10-01".to_date)).to eq("2019-10-01".to_date)
+    end
+
+    it "returns correct occurence on end date" do
+      item = items(:daily_recurring)
+      expect(item.last_occurence_before("2019-10-02".to_date)).to eq("2019-10-02".to_date)
+    end
+
+    it "returns currect occurence after end date" do
+      item = items(:daily_recurring)
+      expect(item.last_occurence_before("2019-10-03".to_date)).to eq("2019-10-02".to_date)
+    end
+
+    it "returns correct occurence after rounding" do
+      item = items(:biweekly_recurring)
+      expect(item.last_occurence_before("2019-10-03".to_date)).to eq("2019-09-27".to_date)
+    end
   end
 end

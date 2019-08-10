@@ -1,9 +1,19 @@
-<div class="grid-x">
+<div class="grid-x grid-margin-x align-center">
     <div class="cell auto">
         <h1>Items</h1>
     </div>
     <div class="cell shrink">
-        <%= link_to 'New', new_account_item_path %>
+        <label for="show_past">Show Inactive</label>
+        <div class="switch large">
+            <input class="switch-input toggle-fields" type="checkbox" value="1" id="show_past" data-toggle-true="<%= @past_items.ids.map{|i| "item-#{i}"}.join(' ') %>">
+            <label class="switch-paddle" for="show_past">
+                <span class="switch-active" aria-hidden="true">Yes</span>
+                <span class="switch-inactive" aria-hidden="true">No</span>
+            </label>
+        </div>
+    </div>
+    <div class="cell shrink">
+        <%= link_to 'New', new_account_item_path, class: 'button' %>
     </div>
 </div>
 
@@ -19,10 +29,10 @@
     <div class="cell large-2">
         <b>Category</b>
     </div>
-    <div class="cell large-2">
+    <div class="cell large-1">
         <b>Amount</b>
     </div>
-    <div class="cell large-2">
+    <div class="cell large-3">
         <b>Repeats</b>
     </div>
     <div class="cell large-1">
@@ -41,13 +51,42 @@
             <%= item.name %>
         </div>
         <div class="cell large-2">
-            <%#= item.category %>
+            <%= item.category %>
         </div>
-        <div class="cell large-2">
+        <div class="cell large-1">
             <%= number_to_currency(item.amount) %>
         </div>
+        <div class="cell large-3">
+            <u class="tooltip" title="<%= item.past? ? "This item has finished recurring. It's last occurrence was on #{item.previous_occurence}" : "This item's next occurrence will be on #{item.next_occurence}" %>">
+                <%= item.display_repeat_details %>
+            </u>
+        </div>
+        <div class="cell large-1">
+            <%= link_to 'Edit', edit_account_item_path(@account, item) %> | <%= link_to 'Delete', account_item_path(@account, item), method: :delete %>
+        </div>
+    </div>
+<% end %>
+<% @past_items.each do |item| %>
+    <div class="grid-x align-center grid-padding-y" id="item-<%= item.id %>">
+        <div class="cell large-1">
+            <%= item.is_bill ? '-' : '+' %>
+        </div>
         <div class="cell large-2">
-            <%= item.display_repeat_details %>
+            <%= item.start_date %>
+        </div>
+        <div class="cell large-2">
+            <%= item.name %>
+        </div>
+        <div class="cell large-2">
+            <%= item.category %>
+        </div>
+        <div class="cell large-1">
+            <%= number_to_currency(item.amount) %>
+        </div>
+        <div class="cell large-3">
+            <u class="tooltip" title="<%= item.past? ? "This item has finished recurring. It's last occurrence was on #{item.previous_occurence}" : "This item's next occurrence will be on #{item.next_occurence}" %>">
+                <%= item.display_repeat_details %>
+            </u>
         </div>
         <div class="cell large-1">
             <%= link_to 'Edit', edit_account_item_path(@account, item) %> | <%= link_to 'Delete', account_item_path(@account, item), method: :delete %>
