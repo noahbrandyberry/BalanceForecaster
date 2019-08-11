@@ -61,7 +61,7 @@
     <div class="field">
         <%= label_tag :start_end_date, 'Date', id: 'date-label' %>
         <%= label_tag :start_end_date, 'Start date - End date', id: 'start-date-label' %>
-        <%= text_field_tag :start_end_date, @item.form_date, required: true, pattern: '', placeholder: 'MM/DD/YYYY' %>
+        <%= text_field_tag :start_end_date, @item.form_date, required: true, pattern: '', placeholder: @item.repeat ? 'YYYY/MM/DD - YYYY/MM/DD' : 'YYYY/MM/DD' %>
         <p class="form-error">Date can't be blank</p>
     </div>
 

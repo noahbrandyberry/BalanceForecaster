@@ -1,0 +1,43 @@
+<h1>Forecast</h1>
+
+<div class="grid-x align-center grid-padding-y">
+    <div class="cell large-1">
+    </div>
+    <div class="cell large-2">
+        <b>Date</b>
+    </div>
+    <div class="cell large-2">
+        <b>Name</b>
+    </div>
+    <div class="cell large-2">
+        <b>Category</b>
+    </div>
+    <div class="cell large-2">
+        <b>Amount</b>
+    </div>
+    <div class="cell large-2">
+        <b>Balance</b>
+    </div>
+</div>
+<% @forecast.each do |occurrence| %>
+    <div class="grid-x align-center grid-padding-y" data-item-id="<%= occurrence.item_id %>">
+        <div class="cell large-1">
+            <%= occurrence.is_bill ? '<i class="far fa-minus-square fa-2x"></i>'.html_safe : '<i class="far fa-plus-square fa-2x"></i>'.html_safe %>
+        </div>
+        <div class="cell large-2">
+            <%= occurrence.date %>
+        </div>
+        <div class="cell large-2">
+            <%= occurrence.name %>
+        </div>
+        <div class="cell large-2">
+            <%= occurrence.category %>
+        </div>
+        <div class="cell large-2">
+            <%= number_to_currency(occurrence.amount) %>
+        </div>
+        <div class="cell large-2">
+            <%= number_to_currency(occurrence.balance) %>
+        </div>
+    </div>
+<% end %>

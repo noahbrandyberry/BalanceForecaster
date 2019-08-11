@@ -194,7 +194,7 @@ RSpec.describe Item, type: :model do
       expect(item.last_occurence_before("2019-10-02".to_date)).to eq("2019-10-02".to_date)
     end
 
-    it "returns currect occurence after end date" do
+    it "returns correct occurence after end date" do
       item = items(:daily_recurring)
       expect(item.last_occurence_before("2019-10-03".to_date)).to eq("2019-10-02".to_date)
     end
@@ -202,6 +202,49 @@ RSpec.describe Item, type: :model do
     it "returns correct occurence after rounding" do
       item = items(:biweekly_recurring)
       expect(item.last_occurence_before("2019-10-03".to_date)).to eq("2019-09-27".to_date)
+    end
+  end
+  
+  context 'amount_before' do
+    it "returns no amount before start date when recurring" do
+      biweekly_recurring = items(:biweekly_recurring)
+      item = items(:daily_recurring)
+      expect(item.amount_before(Occurrence.new(biweekly_recurring, "2019-08-02".to_date))).to eq(0)
+    end
+
+    it "returns correct amount after start date when recurring" do
+      biweekly_recurring = items(:biweekly_recurring)
+      item = items(:daily_recurring)
+      expect(item.amount_before(Occurrence.new(biweekly_recurring, "2019-08-30".to_date))).to eq(-20)
+    end
+
+    it "returns no amount before start date when non recurring" do
+      biweekly_recurring = items(:biweekly_recurring)
+      item = items(:single)
+      expect(item.amount_before(Occurrence.new(biweekly_recurring, "2019-08-02".to_date))).to eq(0)
+    end
+
+    it "returns correct amount after start date when non recurring" do
+      biweekly_recurring = items(:biweekly_recurring)
+      item = items(:single)
+      expect(item.amount_before(Occurrence.new(biweekly_recurring, "2019-08-30".to_date))).to eq(-10)
+    end
+
+    it "returns correct amount before end date" do
+      biweekly_recurring = items(:biweekly_recurring)
+      item = items(:daily_recurring)
+      expect(item.amount_before(Occurrence.new(biweekly_recurring, "2019-09-27".to_date))).to eq(-300)
+    end
+
+    it "returns correct amount after end date" do
+      biweekly_recurring = items(:biweekly_recurring)
+      item = items(:daily_recurring)
+      expect(item.amount_before(Occurrence.new(biweekly_recurring, "2019-10-11".to_date))).to eq(-350)
+    end
+
+    it "returns correct amount with biweekly recurrence" do
+      item = items(:biweekly_recurring)
+      expect(item.amount_before(Occurrence.new(item, "2019-09-27".to_date))).to eq(-80)
     end
   end
 end

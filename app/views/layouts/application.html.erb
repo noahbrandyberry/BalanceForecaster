@@ -14,7 +14,7 @@
     <meta name="keywords" content="<%= yield_meta_tag(:keywords) %>" />
   </head>
 
-  <body>
+  <body data-group="<%= controller_name %>" data-view="<%= action_name %>">
     <%= render 'header'; %>
 
     <div class="grid-container">

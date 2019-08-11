@@ -13,11 +13,28 @@ class Item < ApplicationRecord
     
     scope :past, -> { where(repeat: false).where('start_date < ?', Date.today).or(where(repeat: true).where('end_date < ?', Date.today)) }
     scope :future, -> { where(repeat: false).where('start_date > ?', Date.today).or(where(repeat: true).where('end_date > ?', Date.today).or(where(repeat: true, end_date: nil))) }
+    scope :starts_before, -> (date = Date.today) { where('start_date <= ?', date) }
 
-    def form_date format = '%m/%d/%Y'
+    def form_date format = '%Y/%m/%d'
         if !new_record?
             repeat && end_date ? "#{start_date.strftime(format)} - #{end_date.strftime(format)}" : start_date.strftime(format)
         end
+    end
+
+    def occurrences_before occurrence
+        # Gets all occurrences before passed in occurrence date
+        occurrences = occurrences_between(start_date..occurrence.date).map{|occurrence_date| Occurrence.new(self, occurrence_date)}
+        occurrences << occurrence
+        # Sorts all occurrence including passed in occurrence
+        occurrences.sort_by!{|o| [o.date, o.is_bill ? 1 : 0, o.name, o.item_id]}
+
+        index = occurrences.index(occurrence) - (id === occurrence.item_id ? 1 : 0)
+        # Removes all occurrences after current occurrence (to account for occurrences on the same day)
+        occurrences[0, index]
+    end
+
+    def amount_before occurrence
+        occurrences_before(occurrence).sum{|o| o.is_bill ? -(o.amount.abs) : o.amount.abs}
     end
 
     def display_repeat_details include_end_date = true, format = '%m/%d/%Y'
@@ -97,15 +114,19 @@ class Item < ApplicationRecord
 
     def occurrences_between date_range
         date = first_occurence_after(date_range.begin)
-        occurrences = [date]
-        max_date = end_date ? [date_range.end, end_date].min : date_range.end
+        occurrences = []
 
-        if repeat
-            date += repeat_frequency.send(repeat_type)
+        if date && date.between?(date_range.begin, date_range.end)
+            occurrences << date
+            max_date = end_date ? [date_range.end, end_date].min : date_range.end
 
-            while date <= max_date
-                occurrences << date
+            if repeat
                 date += repeat_frequency.send(repeat_type)
+
+                while date <= max_date
+                    occurrences << date
+                    date += repeat_frequency.send(repeat_type)
+                end
             end
         end
 

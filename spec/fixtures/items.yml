@@ -3,6 +3,7 @@ single:
   name: McDonalds
   amount: 10
   start_date: 2019-8-20
+  is_bill: true
 
 daily_recurring:
   account: checking
@@ -13,22 +14,25 @@ daily_recurring:
   repeat_frequency: 1
   repeat_type: 0
   end_date: 2019-10-2
+  is_bill: true
 
 biweekly_recurring:
   account: checking
   name: Shell Gas Purchase
-  amount: 10
+  amount: 20
   start_date: 2019-8-2
   repeat: true
   repeat_frequency: 2
   repeat_type: 1
   end_date: 2019-10-2
+  is_bill: true
 
 monthly_recurring:
   account: checking
   name: Sling
-  amount: 10
+  amount: 30
   start_date: 2019-8-24
   repeat: true
   repeat_frequency: 1
   repeat_type: 2
+  is_bill: true

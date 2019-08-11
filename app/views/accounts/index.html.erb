@@ -1,5 +1,5 @@
 <div class="grid-x align-center">
-    <div class="cell large-8">
+    <div class="cell large-10">
         <div class="grid-x">
             <div class="cell auto">
                 <h1>Accounts</h1>
@@ -9,21 +9,27 @@
             </div>
         </div>
 
-        <div class="grid-x align-center grid-padding-y medium-up-3">
+        <div class="grid-x align-center grid-padding-y medium-up-4">
             <div class="cell">
                 <b>Name</b>
             </div>
             <div class="cell">
-                <b>Balance</b>
+                <b>Starting Balance</b>
+            </div>
+            <div class="cell">
+                <b>Today's Balance</b>
             </div>
             <div class="cell">
                 <b>Actions</b>
             </div>
         </div>
         <% @accounts.each do |account| %>
-            <div class="grid-x align-center grid-padding-y medium-up-3">
+            <div class="grid-x align-center grid-padding-y medium-up-4">
                 <div class="cell">
                     <%= account.name %>
+                </div>
+                <div class="cell">
+                    <%= number_to_currency(account.balance) %>
                 </div>
                 <div class="cell">
                     <%= number_to_currency(account.balance) %>

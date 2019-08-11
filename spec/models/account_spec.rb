@@ -28,4 +28,35 @@ RSpec.describe Account, type: :model do
       expect(subject).to_not be_valid
     end
   end
+
+  context 'forecast' do
+    it "returns correct daily occurences" do
+      account = accounts(:checking)
+      daily_recurring = items(:daily_recurring)
+      biweekly_recurring = items(:biweekly_recurring)
+      monthly_recurring = items(:monthly_recurring)
+      single = items(:single)
+
+      expect(account.forecast("2019-08-01".to_date.."2019-08-31".to_date).map(&:source)).to eq([
+        Occurrence.new(biweekly_recurring, "2019-08-02".to_date),
+        Occurrence.new(biweekly_recurring, "2019-08-16".to_date),
+        Occurrence.new(single, "2019-08-20".to_date),
+        Occurrence.new(monthly_recurring, "2019-08-24".to_date),
+        Occurrence.new(daily_recurring, "2019-08-29".to_date),
+        Occurrence.new(daily_recurring, "2019-08-30".to_date),
+        Occurrence.new(biweekly_recurring, "2019-08-30".to_date),
+        Occurrence.new(daily_recurring, "2019-08-31".to_date)
+      ].map(&:source))
+    end
+  end
+
+  context 'balance_before' do
+    it "returns correct balance on occurrence start date" do
+      account = accounts(:checking)
+      daily_recurring = items(:daily_recurring)
+      biweekly_recurring = items(:biweekly_recurring)
+
+      expect(account.balance_before(Occurrence.new(biweekly_recurring, "2019-08-30".to_date))).to eq(-100)
+    end
+  end
 end

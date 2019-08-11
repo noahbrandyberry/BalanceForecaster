@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
   before_action :create_or_find_category, only: [:create, :update]
 
   def index
-    @items = @account.items.future
+    @items = @account.items.order(:start_date, :is_bill, :name, :id)
     @past_items = @account.items.past
   end
 
@@ -53,7 +53,7 @@ class ItemsController < ApplicationController
   end
 
   def forecast
-    # @items = @account.items
+    @forecast = @account.forecast(Date.today.beginning_of_year..Date.today.end_of_year)
   end
 
   private
