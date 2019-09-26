@@ -92,32 +92,51 @@ RSpec.describe Item, type: :model do
   context 'occurrences' do
     it "returns correct daily occurences" do
       item = items(:daily_recurring)
-      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date)).to eq(["2019-08-29".to_date, "2019-08-30".to_date, "2019-08-31".to_date])
+      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date).map(&:source)).to eq([
+        Occurrence.new(item, "2019-08-29".to_date, item.name, 10), 
+        Occurrence.new(item, "2019-08-30".to_date, item.name, 10), 
+        Occurrence.new(item, "2019-08-31".to_date, item.name, 10)
+      ].map(&:source))
     end
 
     it "returns correct biweekly occurences" do
       item = items(:biweekly_recurring)
-      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date)).to eq(["2019-08-02".to_date, "2019-08-16".to_date, "2019-08-30".to_date])
+      forecast_item = forecast_items(:biweekly_recurring_occurrence)
+      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date).map(&:source)).to eq([
+        Occurrence.new(item, "2019-08-02".to_date), 
+        Occurrence.new(item, "2019-08-17".to_date, item.name, 25), 
+        Occurrence.new(item, "2019-08-30".to_date)
+      ].map(&:source))
     end
 
     it "returns correct monthly occurences" do
       item = items(:monthly_recurring)
-      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date)).to eq(["2019-08-24".to_date])
+      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date).map(&:source)).to eq([
+        Occurrence.new(item, "2019-08-24".to_date)
+      ].map(&:source))
     end
 
     it "returns single occurrence when non recurring" do
       item = items(:single)
-      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date)).to eq(["2019-08-20".to_date])
+      expect(item.occurrences_between("2019-08-01".to_date.."2019-08-31".to_date).map(&:source)).to eq([
+        Occurrence.new(item, "2019-08-20".to_date)
+      ].map(&:source))
     end
 
     it "returns correct occurences with end date" do
       item = items(:daily_recurring)
-      expect(item.occurrences_between("2019-10-01".to_date.."2019-10-31".to_date)).to eq(["2019-10-01".to_date, "2019-10-02".to_date])
+      expect(item.occurrences_between("2019-10-01".to_date.."2019-10-31".to_date).map(&:source)).to eq([
+        Occurrence.new(item, "2019-10-01".to_date, item.name, 10), 
+        Occurrence.new(item, "2019-10-02".to_date, item.name, 10)
+      ].map(&:source))
     end
 
     it "returns correct occurences with biweekly end date" do
       item = items(:biweekly_recurring)
-      expect(item.occurrences_between("2019-09-01".to_date.."2019-10-31".to_date)).to eq(["2019-09-13".to_date, "2019-09-27".to_date])
+      expect(item.occurrences_between("2019-09-01".to_date.."2019-10-31".to_date).map(&:source)).to eq([
+        Occurrence.new(item, "2019-09-13".to_date), 
+        Occurrence.new(item, "2019-09-27".to_date)
+      ].map(&:source))
     end
   end
 
@@ -244,7 +263,7 @@ RSpec.describe Item, type: :model do
 
     it "returns correct amount with biweekly recurrence" do
       item = items(:biweekly_recurring)
-      expect(item.amount_before(Occurrence.new(item, "2019-09-27".to_date))).to eq(-80)
+      expect(item.amount_before(Occurrence.new(item, "2019-09-27".to_date))).to eq(-85)
     end
   end
 end

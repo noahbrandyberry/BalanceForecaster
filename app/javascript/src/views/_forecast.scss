@@ -1,0 +1,73 @@
+[data-group=items][data-view=forecast] {
+    table.forecast-table {
+        user-select: none;
+
+        .row-actions {
+            display: none;
+        }
+
+        td {
+            position: relative;
+        }
+
+        td.date {
+            font-weight: 600;
+        }
+
+        tbody tr {
+            transition: all 0.25s ease;
+            cursor: pointer;
+
+            h2 {
+                font-size: 1.25rem;
+                margin: 0;
+            }
+
+            &:not(.group).is-hovered {
+                background-color: $dark-gray;
+                color: $white;
+
+                .fa-minus-square, .fa-plus-square {
+                    color: $white;
+                }
+            }
+        }
+        
+        .show-actions {
+            .row-actions {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                height: 1.5rem;
+                width: 1.5rem;
+                background-color: $success-color;
+                color: $white;
+                top: -0.75rem;
+                right: -0.75rem;
+                border-radius: 0.75rem;
+                cursor: pointer;
+
+                i {
+                    border: 2rem solid transparent;
+                }
+
+                &:hover {
+                    background-color: darken($success-color, 20%);
+                }
+            }
+        }
+    }
+
+    .datepicker {
+        z-index: 2000;
+    }
+}
+
+#editOccurrenceModal {
+    #modifications-callout {
+        h2 {
+            font-size: 1.5rem;
+        }
+    }
+}

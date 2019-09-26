@@ -18,6 +18,7 @@ window.Cookies = require("js-cookie")
 window.moment = require("moment")
 import "../content/balance-forecaster"
 import "../content/items"
+require('datatables.net-zf');
 
 $(document).on('turbolinks:before-cache', function() {
   BF.destroy();

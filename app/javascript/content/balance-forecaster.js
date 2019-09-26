@@ -7,6 +7,7 @@ window.BF = {
         BF.initAbideValidators()
         BF.initTooltips()
         BF.initViews()
+        BF.initTables()
     },
     destroy: () => {
         if ($('#start_end_date').datepicker().data('datepicker')) {
@@ -80,6 +81,20 @@ window.BF = {
         var to = $el.val();
         
         return (parseInt(to) > parseInt(from));
+    },
+    initTables: () => {
+        $('table.data-table').DataTable({
+            paging: false,
+            info: false,
+            autoWidth: false,
+            columnDefs: [
+                { width: "50px", targets: 0 }
+            ]
+        });
+
+        var left_header = $('table.data-table').closest('.dataTables_wrapper').children('.row:first-child').children('.cell:first-child');
+
+        $('.data-table-left-header').appendTo(left_header);
     },
     initViews: () => {
         let group = $('body').data('group');

@@ -1,11 +1,13 @@
 class ItemsController < ApplicationController
   before_action :set_account
-  before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_item, only: [:show, :edit, :update, :destroy, :edit_occurrence, :update_occurrence]
   before_action :create_or_find_category, only: [:create, :update]
+  before_action :authenticate_user!
 
   def index
-    @items = @account.items.order(:start_date, :is_bill, :name, :id)
+    @items = @account.items.order(:start_date, :is_bill, :name, :id).includes(:category)
     @past_items = @account.items.past
+    @item = @account.items.new
   end
 
   def show
@@ -53,7 +55,18 @@ class ItemsController < ApplicationController
   end
 
   def forecast
-    @forecast = @account.forecast(Date.today.beginning_of_year..Date.today.end_of_year)
+    @forecast = @account.forecast(Date.today.prev_month.prev_month.beginning_of_month..Date.today.end_of_year)
+    @item = @account.items.new
+  end
+
+  def edit_occurrence
+    @occurrence = @item.occurrence_on params[:date].to_date
+  end
+
+  def update_occurrence
+    @occurrence = @item.occurrence_on params[:date].to_date
+
+    # @occurrence.update()
   end
 
   private

@@ -1,43 +1,42 @@
 <h1>Forecast</h1>
 
-<div class="grid-x align-center grid-padding-y">
-    <div class="cell large-1">
-    </div>
-    <div class="cell large-2">
-        <b>Date</b>
-    </div>
-    <div class="cell large-2">
-        <b>Name</b>
-    </div>
-    <div class="cell large-2">
-        <b>Category</b>
-    </div>
-    <div class="cell large-2">
-        <b>Amount</b>
-    </div>
-    <div class="cell large-2">
-        <b>Balance</b>
-    </div>
-</div>
-<% @forecast.each do |occurrence| %>
-    <div class="grid-x align-center grid-padding-y" data-item-id="<%= occurrence.item_id %>">
-        <div class="cell large-1">
-            <%= occurrence.is_bill ? '<i class="far fa-minus-square fa-2x"></i>'.html_safe : '<i class="far fa-plus-square fa-2x"></i>'.html_safe %>
-        </div>
-        <div class="cell large-2">
-            <%= occurrence.date %>
-        </div>
-        <div class="cell large-2">
-            <%= occurrence.name %>
-        </div>
-        <div class="cell large-2">
-            <%= occurrence.category %>
-        </div>
-        <div class="cell large-2">
-            <%= number_to_currency(occurrence.amount) %>
-        </div>
-        <div class="cell large-2">
-            <%= number_to_currency(occurrence.balance) %>
-        </div>
-    </div>
-<% end %>
+<table class="forecast-table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @forecast.group_by { |o| o.date.strftime("%B %Y") }.each do |month_name, occurrences| %>
+            <tr class="group" data-date="<%= Date.parse(month_name) - 1.day %>">
+                <td colspan="5"><h2><%= month_name %></h2></td>
+                <td style="display: none;"></td>
+                <td style="display: none;"></td>
+                <td style="display: none;"></td>
+                <td style="display: none;"></td>
+                <td><div class="row-actions"><i class="fas fa-plus"></i></div></td>
+            </tr>
+
+            <% occurrences.each do |occurrence| %>
+                <tr data-date="<%= occurrence.date %>" data-id="<%= occurrence.item_id %>">
+                    <td><%= occurrence.is_bill ? '<i class="far fa-minus-square fa-2x"></i>'.html_safe : '<i class="far fa-plus-square fa-2x"></i>'.html_safe %></td>
+                    <td class="date"><%= occurrence.date %></td>
+                    <td><%= occurrence.name %></td>
+                    <td><%= occurrence.category %></td>
+                    <td><%= number_to_currency(occurrence.amount) %></td>
+                    <td>
+                        <%= number_to_currency(occurrence.balance) %>
+                        <div class="row-actions"><i class="fas fa-plus"></i></div>
+                    </td>
+                </tr>
+            <% end %>
+        <% end %>
+    </tbody>
+</table>
+
+<%= render 'modal_form' %>

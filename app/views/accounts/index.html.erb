@@ -32,7 +32,7 @@
                     <%= number_to_currency(account.balance) %>
                 </div>
                 <div class="cell">
-                    <%= number_to_currency(account.balance) %>
+                    <%= number_to_currency(account.balance_on) %>
                 </div>
                 <div class="cell">
                     <%= link_to 'Items', account_items_path(account) %> | <%= link_to 'Edit', edit_account_path(account) %> | <%= link_to 'Delete', account_path(account), method: :delete %>

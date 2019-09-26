@@ -16,9 +16,68 @@
 }
 
 .fa-minus-square {
+    transition: color 0.25s ease;
     color: $alert-color;
 }
 
 .fa-plus-square {
+    transition: color 0.25s ease;
     color: $success-color;
+}
+
+.tooltipstered {
+    cursor: help;
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.button.no-margin {
+    margin: 0;
+}
+
+.dataTables_wrapper {
+    .data-table-left-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+
+        & > div {
+            margin-right: 1rem;
+        }
+    }
+
+    .dataTable {
+        :not([data-orderable="false"]) {
+            &.sorting {
+                &:after {
+                    content: "\f0dc";
+                    font-family: 'Font Awesome 5 Free';
+                    font-weight: 700;
+                    float: right;
+                    color: $dark-gray;
+                }
+            }
+        
+            &.sorting_asc {
+                &:after {
+                    content: "\f0de";
+                    font-family: 'Font Awesome 5 Free';
+                    font-weight: 700;
+                    float: right;
+                }
+            }
+        
+            &.sorting_desc {
+                &:after {
+                    content: "\f0dd";
+                    font-family: 'Font Awesome 5 Free';
+                    font-weight: 700;
+                    float: right;
+                }
+            }
+        }
+    }
 }

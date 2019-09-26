@@ -1,0 +1,14 @@
+biweekly_recurring_occurrence:
+  item: biweekly_recurring
+  date: 2019-8-16
+  new_date: 2019-8-17
+  amount: 25
+  continues: false
+  deleted: false
+
+daily_recurring_occurrence:
+  item: daily_recurring
+  date: 2019-8-29
+  amount: 10
+  continues: true
+  deleted: false

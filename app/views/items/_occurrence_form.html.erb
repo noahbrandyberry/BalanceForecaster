@@ -1,0 +1,76 @@
+
+
+<div class="reveal" id="editOccurrenceModal" data-reveal>
+    <h1>Edit Occurrence</h1>
+
+    <% if @occurrence.forecast_item || @occurrence.affected_forecast_items.length > 0 %>
+        <p><a data-toggle="modifications-callout">Show Modifications</a></p>
+
+        <div class="callout" id="modifications-callout" data-toggler data-animate="fade-in fade-out" style="display: none;">
+            <h2>Modifications</h2>
+            <%= @occurrence.forecast_item.try(:name) %><br/>
+
+            <% @occurrence.affected_forecast_items.each do |forecast_item| %>
+                <%= forecast_item.name %>
+            <% end %>
+        </div>
+    <% end %>
+
+    <%= form_tag(account_update_occurrence_url, html: {novalidate: "novalidate", data: {abide: ''}}) do |f| %>
+        <%= fields_for "occurrence", @occurrence do |f| %>
+
+            <div class="field">
+                <%= f.label :name %>
+                <%= f.text_field :name, autofocus: true, required: true, disabled: true %>
+            </div>
+
+            <div class="grid-x grid-margin-x">
+                <div class="cell shrink">
+                    <div class="field">
+                        <%= f.label :is_bill %>
+                        <%= f.switch :is_bill, disabled: true %>
+                    </div>
+                </div>
+
+                <div class="cell auto">
+                    <div class="field">
+                        <%= f.label :amount %>
+                        <%= f.number_field :amount, step: :any, required: true, disabled: true, data: {validator: 'greater_than', greater_than: 0} %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-x grid-margin-x">
+                <div class="cell shrink">
+                    <div class="field">
+                        <%= f.label :continues %>
+                        <%= f.switch :continues, disabled: true %>
+                    </div>
+                </div>
+
+                <div class="cell auto">
+                    <div class="field">
+                        <%= f.label :date %>
+                        <%= f.text_field :date, required: true, disabled: true %>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+        
+
+        <div class="grid-x">
+            <div class="cell medium-auto">
+                <button class="button secondary" data-close aria-label="Close" type="button">
+                    Close
+                </button>
+            </div>
+            <div class="grid-x medium-shrink">
+                <%= submit_tag "Submit", class: 'button' %>
+            </div>
+        </div>
+    <% end %>
+
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>

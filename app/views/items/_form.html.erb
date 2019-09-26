@@ -75,7 +75,9 @@
 
     <div class="grid-x">
         <div class="cell medium-auto">
-            <%= link_to "Back", account_items_path, class: 'button secondary' %>
+            <button class="button secondary" data-close aria-label="Close" type="button">
+                Close
+            </button>
         </div>
         <div class="grid-x medium-shrink">
             <%= f.submit "Submit", class: 'button' %>

@@ -1,0 +1,7 @@
+if ($('#editItemModal').length > 0) {
+    $('#editItemModal').foundation('_destroy');
+    $('#editItemModal').remove();
+}
+$('body').append('<%= escape_javascript(render 'modal_form') %>');
+$('#editItemModal').foundation();
+$('#editItemModal').foundation('open');

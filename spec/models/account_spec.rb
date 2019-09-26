@@ -36,16 +36,17 @@ RSpec.describe Account, type: :model do
       biweekly_recurring = items(:biweekly_recurring)
       monthly_recurring = items(:monthly_recurring)
       single = items(:single)
+      forecast_item = forecast_items(:biweekly_recurring_occurrence)
 
       expect(account.forecast("2019-08-01".to_date.."2019-08-31".to_date).map(&:source)).to eq([
         Occurrence.new(biweekly_recurring, "2019-08-02".to_date),
-        Occurrence.new(biweekly_recurring, "2019-08-16".to_date),
+        Occurrence.new(biweekly_recurring, "2019-08-17".to_date, biweekly_recurring.name, 25),
         Occurrence.new(single, "2019-08-20".to_date),
         Occurrence.new(monthly_recurring, "2019-08-24".to_date),
-        Occurrence.new(daily_recurring, "2019-08-29".to_date),
-        Occurrence.new(daily_recurring, "2019-08-30".to_date),
+        Occurrence.new(daily_recurring, "2019-08-29".to_date, daily_recurring.name, 10),
+        Occurrence.new(daily_recurring, "2019-08-30".to_date, daily_recurring.name, 10),
         Occurrence.new(biweekly_recurring, "2019-08-30".to_date),
-        Occurrence.new(daily_recurring, "2019-08-31".to_date)
+        Occurrence.new(daily_recurring, "2019-08-31".to_date, daily_recurring.name, 10)
       ].map(&:source))
     end
   end
@@ -56,7 +57,7 @@ RSpec.describe Account, type: :model do
       daily_recurring = items(:daily_recurring)
       biweekly_recurring = items(:biweekly_recurring)
 
-      expect(account.balance_before(Occurrence.new(biweekly_recurring, "2019-08-30".to_date))).to eq(-100)
+      expect(account.balance_before(Occurrence.new(biweekly_recurring, "2019-08-30".to_date))).to eq(-105)
     end
   end
 end

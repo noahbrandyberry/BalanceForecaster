@@ -1,6 +1,8 @@
 class Item < ApplicationRecord
     belongs_to :account
     belongs_to :category, optional: true
+
+    has_many :forecast_items
     
     validates :account, presence: true
     validates :name, presence: true
@@ -23,7 +25,7 @@ class Item < ApplicationRecord
 
     def occurrences_before occurrence
         # Gets all occurrences before passed in occurrence date
-        occurrences = occurrences_between(start_date..occurrence.date).map{|occurrence_date| Occurrence.new(self, occurrence_date)}
+        occurrences = occurrences_between(start_date..occurrence.date)
         occurrences << occurrence
         # Sorts all occurrence including passed in occurrence
         occurrences.sort_by!{|o| [o.date, o.is_bill ? 1 : 0, o.name, o.item_id]}
@@ -34,7 +36,16 @@ class Item < ApplicationRecord
     end
 
     def amount_before occurrence
-        occurrences_before(occurrence).sum{|o| o.is_bill ? -(o.amount.abs) : o.amount.abs}
+        occurrences_before(occurrence).sum{|o| o.real_amount}
+    end
+
+    def occurrences_before_or_on date
+        # Gets all occurrences before passed in occurrence date
+        occurrences_between(start_date..date)
+    end
+
+    def total_amount_on date = Date.today
+        occurrences_before_or_on(date).sum{|o| o.real_amount}
     end
 
     def display_repeat_details include_end_date = true, format = '%m/%d/%Y'
@@ -112,21 +123,47 @@ class Item < ApplicationRecord
         end
     end
 
+    def occurrence_on date
+        occurrences_before_or_on(date).find{|occurrence| occurrence.date === date}
+    end
+
     def occurrences_between date_range
-        date = first_occurence_after(date_range.begin)
         occurrences = []
 
-        if date && date.between?(date_range.begin, date_range.end)
-            occurrences << date
-            max_date = end_date ? [date_range.end, end_date].min : date_range.end
+        if start_date.between?(date_range.begin, date_range.end) || (start_date <= date_range.end && repeat)
 
             if repeat
-                date += repeat_frequency.send(repeat_type)
+                date = start_date
+                max_date = end_date ? [date_range.end, end_date].min : date_range.end
+                occurrence_name = name
+                occurrence_amount = amount
+                occurrence_is_bill = is_bill
+                affected_forecast_items = []
 
                 while date <= max_date
-                    occurrences << date
+                    forecast_item = forecast_items.find{|forecast_item| forecast_item.date === date}
+                    
+                    occurrences << Occurrence.new(self, 
+                        (forecast_item.try(:new_date).nil? ? date : forecast_item.new_date), 
+                        (forecast_item.try(:name).nil? ? occurrence_name : forecast_item.name),
+                        (forecast_item.try(:amount).nil? ? occurrence_amount : forecast_item.amount),
+                        (forecast_item.try(:is_bill).nil? ? occurrence_is_bill : forecast_item.is_bill),
+                        forecast_item,
+                        affected_forecast_items.clone
+                    ) if date >= date_range.begin
+
+                    if forecast_item.try(:continues)
+                        occurrence_name = forecast_item.name if forecast_item.name
+                        occurrence_amount = forecast_item.amount if forecast_item.amount
+                        occurrence_is_bill = forecast_item.is_bill if forecast_item.is_bill
+                        date = forecast_item.new_date if forecast_item.new_date
+                        affected_forecast_items << forecast_item
+                    end
+
                     date += repeat_frequency.send(repeat_type)
                 end
+            else
+                occurrences << Occurrence.new(self, start_date)
             end
         end
 

@@ -1,0 +1,7 @@
+if ($('#editOccurrenceModal').length > 0) {
+    $('#editOccurrenceModal').foundation('_destroy');
+    $('#editOccurrenceModal').remove();
+}
+$('body').append('<%= escape_javascript(render 'occurrence_form') %>');
+$('#editOccurrenceModal').foundation();
+$('#editOccurrenceModal').foundation('open');
