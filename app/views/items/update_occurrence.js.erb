@@ -1,0 +1,9 @@
+    if ($('.forecast-table').length > 0) {
+        var scrollTop = $('.dataTables_scrollBody').scrollTop();
+        $('.forecast-table').DataTable().ajax.reload( function() {
+            $('.dataTables_scrollBody').scrollTop(scrollTop)
+        });
+        $('#editOccurrenceModal').foundation('close');
+    } else {
+        location.reload();
+    }

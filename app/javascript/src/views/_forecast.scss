@@ -1,5 +1,18 @@
 [data-group=items][data-view=forecast] {
+    .dataTables_scrollBody {
+        overflow-x: hidden !important;   
+        overflow-y: scroll !important;   
+    }
+
+    .dataTables_paginate {
+        display: none;
+    }
+
     table.forecast-table {
+        thead {
+            display: none;
+        }
+
         user-select: none;
 
         .row-actions {
@@ -8,31 +21,47 @@
 
         td {
             position: relative;
+
+            b {
+                font-weight: 600;
+            }
         }
 
-        td.date {
-            font-weight: 600;
-        }
-
-        tbody tr {
-            transition: all 0.25s ease;
-            cursor: pointer;
+        tr.group {
+            background-color: $primary-color;
+            color: $white;
+            position: sticky;
+            z-index: 1;
+            top: 0;
 
             h2 {
-                font-size: 1.25rem;
+                font-size: 1.5rem;
                 margin: 0;
             }
 
-            &:not(.group).is-hovered {
-                background-color: $dark-gray;
-                color: $white;
+            td {
+                font-weight: 600;
+            }
+        }
 
-                .fa-minus-square, .fa-plus-square {
+        tbody {
+            border: none;
+            
+            tr {
+                transition: all 0.25s ease;
+                cursor: pointer;
+
+                &:not(.group).is-hovered {
+                    background-color: $dark-gray;
                     color: $white;
+
+                    .fa-minus-square, .fa-plus-square {
+                        color: $white;
+                    }
                 }
             }
         }
-        
+
         .show-actions {
             .row-actions {
                 display: flex;
@@ -44,9 +73,10 @@
                 background-color: $success-color;
                 color: $white;
                 top: -0.75rem;
-                right: -0.75rem;
+                right: 1rem;
                 border-radius: 0.75rem;
                 cursor: pointer;
+                z-index: 2;
 
                 i {
                     border: 2rem solid transparent;
@@ -57,10 +87,6 @@
                 }
             }
         }
-    }
-
-    .datepicker {
-        z-index: 2000;
     }
 }
 

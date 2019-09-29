@@ -1,0 +1,15 @@
+<% if @item.valid? %>
+    if ($('.forecast-table').length > 0) {
+        var scrollTop = $('.dataTables_scrollBody').scrollTop();
+        $('.forecast-table').DataTable().ajax.reload( function() {
+            $('.dataTables_scrollBody').scrollTop(scrollTop)
+        });
+        $('#editItemModal').foundation('close');
+    } else {
+        location.reload();
+    }
+<% else %>
+    $('#editItemModal').find('form').html('<%= escape_javascript(render 'form', url: account_items_path(@account)) %>');
+    BF.items.initDatepicker($('#editItemModal'));
+    BF.initHiddenFields()
+<% end %>

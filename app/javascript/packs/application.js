@@ -19,6 +19,7 @@ window.moment = require("moment")
 import "../content/balance-forecaster"
 import "../content/items"
 require('datatables.net-zf');
+require('datatables-scroller');
 
 $(document).on('turbolinks:before-cache', function() {
   BF.destroy();

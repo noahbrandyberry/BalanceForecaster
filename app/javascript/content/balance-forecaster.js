@@ -13,6 +13,13 @@ window.BF = {
         if ($('#start_end_date').datepicker().data('datepicker')) {
             $('#start_end_date').datepicker().data('datepicker').destroy();
         }
+
+        var dataTable = $('.data-table').DataTable();
+
+        if (dataTable !== null) {
+            dataTable.destroy();
+            dataTable = null;
+        }
     },
     handlers: {
         hiddenFields: () => {
@@ -52,18 +59,18 @@ window.BF = {
             true_ids = true_ids ? "#" + true_ids.split(' ').join(', #') : null;
             false_ids = false_ids ? "#" + false_ids.split(' ').join(', #') : null;
         
-            BF.toggleField(true_ids, true, speed)
-            BF.toggleField(false_ids, false, speed)
+            BF.toggleField(true_ids, true, speed, e.closest('.reveal, body'))
+            BF.toggleField(false_ids, false, speed, e.closest('.reveal, body'))
         } else if (e.is('input[type="checkbox"]')) {
             var true_ids = e.data('toggle-true') ? "#" + e.data('toggle-true').split(' ').join(', #') : null;
             var false_ids = e.data('toggle-false') ? "#" + e.data('toggle-false').split(' ').join(', #') : null;
             
-            BF.toggleField(true_ids, e.is(":checked"), speed)
-            BF.toggleField(false_ids, !e.is(":checked"), speed)
+            BF.toggleField(true_ids, e.is(":checked"), speed, e.closest('.reveal, body'))
+            BF.toggleField(false_ids, !e.is(":checked"), speed, e.closest('.reveal, body'))
         }
     },
-    toggleField: (ids, show, global_speed) => {
-        $(ids).each(function() {
+    toggleField: (ids, show, global_speed, form) => {
+        form.find(ids).each(function() {
             var speed = $(this).is('label') ? 0 : global_speed;
         
             if (show) {

@@ -1,6 +1,8 @@
 class CustomFormBuilder < ActionView::Helpers::FormBuilder
     def switch(attribute_name, *args, **object)
+        object[:id] = object[:id] ? object[:id] : "#{options[:prepend_id]}#{object_name}_#{attribute_name}"
         object[:class] = object[:class] ? "#{object[:class]} switch-input" : "switch-input"
+
         @template.content_tag(:div,
             check_box(attribute_name, *args, **object) + label(attribute_name, @template.content_tag(:span, 'Yes', class: 'switch-active', aria: {hidden: true}) + @template.content_tag(:span, 'No', class: 'switch-inactive', aria: {hidden: true}), class: "switch-paddle"), 
             class: 'switch large'
@@ -8,28 +10,52 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
     end
 
     def text_field(attribute_name, *args, **object)
+        object[:id] = object[:id] ? object[:id] : "#{options[:prepend_id]}#{object_name}_#{attribute_name}"
+
         super(attribute_name, *args, **object) + error_message(attribute_name, args, object)
     end
 
     def number_field(attribute_name, *args, **object)
+        object[:id] = object[:id] ? object[:id] : "#{options[:prepend_id]}#{object_name}_#{attribute_name}"
+
         super(attribute_name, *args, **object) + error_message(attribute_name, args, object)
     end
 
     def email_field(attribute_name, *args, **object)
         object[:field_type] = 'email'
+        object[:id] = object[:id] ? object[:id] : "#{options[:prepend_id]}#{object_name}_#{attribute_name}"
+
         super(attribute_name, *args, **object) + error_message(attribute_name, args, object)
     end
 
     def date_field(attribute_name, *args, **object)
+        object[:id] = object[:id] ? object[:id] : "#{options[:prepend_id]}#{object_name}_#{attribute_name}"
+
         super(attribute_name, *args, **object) + error_message(attribute_name, args, object)
     end
 
     def password_field(attribute_name, *args, **object)
+        object[:id] = object[:id] ? object[:id] : "#{options[:prepend_id]}#{object_name}_#{attribute_name}"
+
         super(attribute_name, *args, **object) + error_message(attribute_name, args, object)
     end
 
+    def hidden_field(attribute_name, *args, **object)
+        object[:id] = object[:id] ? object[:id] : "#{options[:prepend_id]}#{object_name}_#{attribute_name}"
+
+        super(attribute_name, *args, **object)
+    end
+
     def select(attribute_name, choices, options = {}, html_options = {})
+        object[:id] = object[:id] ? object[:id] : "#{options[:prepend_id]}#{object_name}_#{attribute_name}"
+
         super(attribute_name, choices, options, html_options) + error_message(attribute_name, [], html_options)
+    end
+
+    def label(attribute_name, *args, **object)
+        object[:for] = object[:for] ? object[:for] : "#{options[:prepend_id]}#{object_name}_#{attribute_name}"
+
+        super(attribute_name, *args, **object)
     end
 
     def error_message(attribute_name, args, object)

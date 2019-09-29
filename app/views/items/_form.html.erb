@@ -1,4 +1,5 @@
-<%= form_for(@item, url: url, html: {novalidate: "novalidate", data: {abide: ''}}) do |f| %>
+<% prefix = @item.new_record? ? 'new_' : 'edit_' %>
+<%= form_for(@item, url: url, prepend_id: prefix, remote: true, html: {novalidate: "novalidate"}) do |f| %>
     <div class="field">
         <%= f.label :name %>
         <%= f.text_field :name, autofocus: true, required: true %>
@@ -41,7 +42,7 @@
         <div class="cell shrink">
             <div class="field">
                 <%= f.label :repeat, "Recurring" %>
-                <%= f.switch :repeat, class: 'toggle-fields', data: {toggle_true: 'repeat-frequency-field repeat-type-field start-date-label', toggle_false: 'date-label'} %>
+                <%= f.switch :repeat, class: 'toggle-fields', data: {toggle_true: 'repeat-frequency-field repeat-type-field end-date-field'} %>
             </div>
         </div>
         <div class="cell auto">
@@ -58,15 +59,21 @@
         </div>
     </div>
 
-    <div class="field">
-        <%= label_tag :start_end_date, 'Date', id: 'date-label' %>
-        <%= label_tag :start_end_date, 'Start date - End date', id: 'start-date-label' %>
-        <%= text_field_tag :start_end_date, @item.form_date, required: true, pattern: '', placeholder: @item.repeat ? 'YYYY/MM/DD - YYYY/MM/DD' : 'YYYY/MM/DD' %>
-        <p class="form-error">Date can't be blank</p>
-    </div>
+    <div class="grid-x grid-margin-x">
+        <div class="cell large-auto">
+            <div class="field">
+                <%= f.label :start_date %>
+                <%= f.text_field :start_date, required: true, class: 'datepicker-field', placeholder: 'YYYY/MM/DD', data: {inline: true} %>
+            </div>
+        </div>
 
-    <%= f.hidden_field :start_date %>
-    <%= f.hidden_field :end_date %>
+        <div class="cell large-6" id="end-date-field">
+            <div class="field">
+                <%= f.label :end_date %>
+                <%= f.text_field :end_date, class: 'datepicker-field', placeholder: 'YYYY/MM/DD', data: {inline: true} %>
+            </div>
+        </div>
+    </div>
 
     <div class="field">
         <%= f.label :note %>
@@ -78,6 +85,10 @@
             <button class="button secondary" data-close aria-label="Close" type="button">
                 Close
             </button>
+
+            <% if !@item.new_record? %>
+                <%= link_to '<i class="fas fa-trash"></i>'.html_safe, account_item_path(@item.account, @item), method: :delete, data: { confirm: "Are you sure you want to delete this item?" }, remote: true, class: 'button alert' %>
+            <% end %>
         </div>
         <div class="grid-x medium-shrink">
             <%= f.submit "Submit", class: 'button' %>

@@ -8,7 +8,7 @@
 
         <div class="callout" id="modifications-callout" data-toggler data-animate="fade-in fade-out" style="display: none;">
             <h2>Modifications</h2>
-            <%= @occurrence.forecast_item.try(:name) %><br/>
+            <%= @occurrence.name %> - <%= number_to_currency(@occurrence.amount) %><br/>
 
             <% @occurrence.affected_forecast_items.each do |forecast_item| %>
                 <%= forecast_item.name %>
@@ -16,26 +16,26 @@
         </div>
     <% end %>
 
-    <%= form_tag(account_update_occurrence_url, html: {novalidate: "novalidate", data: {abide: ''}}) do |f| %>
+    <%= form_tag(account_update_occurrence_url, remote: true, html: {novalidate: "novalidate", data: {abide: ''}}) do |f| %>
         <%= fields_for "occurrence", @occurrence do |f| %>
 
             <div class="field">
                 <%= f.label :name %>
-                <%= f.text_field :name, autofocus: true, required: true, disabled: true %>
+                <%= f.text_field :name, autofocus: true, required: true %>
             </div>
 
             <div class="grid-x grid-margin-x">
                 <div class="cell shrink">
                     <div class="field">
                         <%= f.label :is_bill %>
-                        <%= f.switch :is_bill, disabled: true %>
+                        <%= f.switch :is_bill %>
                     </div>
                 </div>
 
                 <div class="cell auto">
                     <div class="field">
                         <%= f.label :amount %>
-                        <%= f.number_field :amount, step: :any, required: true, disabled: true, data: {validator: 'greater_than', greater_than: 0} %>
+                        <%= f.number_field :amount, step: :any, required: true, data: {validator: 'greater_than', greater_than: 0} %>
                     </div>
                 </div>
             </div>
@@ -44,14 +44,14 @@
                 <div class="cell shrink">
                     <div class="field">
                         <%= f.label :continues %>
-                        <%= f.switch :continues, disabled: true %>
+                        <%= f.switch :continues, checked: @occurrence.forecast_item.try(:continues) %>
                     </div>
                 </div>
 
                 <div class="cell auto">
                     <div class="field">
                         <%= f.label :date %>
-                        <%= f.text_field :date, required: true, disabled: true %>
+                        <%= f.text_field :date, required: true, class: 'datepicker-field', data: {inline: true} %>
                     </div>
                 </div>
             </div>

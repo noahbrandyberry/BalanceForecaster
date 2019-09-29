@@ -27,9 +27,11 @@ class ItemsController < ApplicationController
       if @item.save
         format.html { redirect_to account_items_path(@account), notice: 'Item was successfully created.' }
         format.json { render :show, status: :created, location: @item }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @item.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -39,9 +41,11 @@ class ItemsController < ApplicationController
       if @item.update(item_params)
         format.html { redirect_to account_items_path(@account), notice: 'Item was successfully updated.' }
         format.json { render :show, status: :ok, location: @item }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @item.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -51,6 +55,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to account_items_path(@account), notice: 'Item was successfully destroyed.' }
       format.json { head :no_content }
+      format.js
     end
   end
 
@@ -60,13 +65,23 @@ class ItemsController < ApplicationController
   end
 
   def edit_occurrence
-    @occurrence = @item.occurrence_on params[:date].to_date
+    if @item.repeat?
+      @occurrence = @item.occurrence_on params[:date].to_date
+    else
+      render :edit
+    end
   end
 
   def update_occurrence
+    params[:occurrence][:new_date] = params[:occurrence][:date] if params[:occurrence][:date]
     @occurrence = @item.occurrence_on params[:date].to_date
+    @occurrence.update(occurrence_params)
 
-    # @occurrence.update()
+    respond_to do |format|
+      format.html { redirect_to account_items_path(@account), notice: 'Item was successfully updated.' }
+      format.json { render :show, status: :ok, location: @occurrence }
+      format.js
+    end
   end
 
   private
@@ -85,6 +100,10 @@ class ItemsController < ApplicationController
     end
 
     def item_params
-      params.require(:item).permit(:name, :is_bill, :repeat, :repeat_frequency, :repeat_type, :amount, :start_date, :end_date, :note, :category_id, :is_transfer, :transfer_id)
+      params.require(:item).permit(:name, :is_bill, :repeat, :repeat_frequency, :repeat_type, :amount, :start_date, :end_date, :note, :category_id)
+    end
+
+    def occurrence_params
+      params.require(:occurrence).permit(:name, :is_bill, :amount, :new_date, :continues)
     end
 end

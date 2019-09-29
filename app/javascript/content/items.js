@@ -1,12 +1,11 @@
 BF.items = {
     init: () => {
         BF.items.handlers.showPastChange()
-        BF.items.handlers.repeatChange()
         BF.items.handlers.forecastTableHover()
         BF.items.handlers.forecastTableClick()
         BF.items.handlers.forecastTableActionClick()
         BF.items.handlers.itemsTableClick()
-        BF.items.initDatepicker()
+        BF.items.initDatepicker($('#createItemModal'))
         BF.items.initForecastTables()
     },
     handlers: {
@@ -20,28 +19,11 @@ BF.items = {
                 }
             });
         },
-        repeatChange: () => {
-            $('#item_repeat').on('change', function() {
-                if ($(this).is(":checked")) {
-                    var datepicker = $('#start_end_date').attr('placeholder', 'YYYY/MM/DD - YYYY/MM/DD').datepicker().data('datepicker').update({
-                        range: true, 
-                        toggleSelected: false,
-                    })
-                } else {
-                    var datepicker = $('#start_end_date').attr('placeholder', 'YYYY/MM/DD').datepicker().data('datepicker').update({
-                        range: false, 
-                        toggleSelected: true,
-                    })
-                }
-
-                datepicker.selectDate(datepicker.selectedDates)
-            });
-        },
         forecastTableActionClick: () => {
             $('table.forecast-table tbody').on('click', 'tr .row-actions', function(){
                 var date = moment($(this).closest('tr').data('date'));
                 var form = $('#createItemModal').find('form');
-                form.find('#start_end_date').datepicker().data('datepicker').selectDate([date.toDate()])
+                form.find('#new_item_start_date').datepicker().data('datepicker').selectDate([date.toDate()])
 
                 $('#createItemModal').foundation('open');
             });
@@ -87,66 +69,81 @@ BF.items = {
             });
         }
     },
-    initDatepicker: () => {
-        $('#start_end_date').removeData('datepicker');
-        if ($('#item_repeat').is(":checked")) {
-            var datepicker = $('#start_end_date').datepicker({
-                language: 'en', 
-                dateFormat: 'yyyy/mm/dd',
-                range: true, 
-                toggleSelected: false,
-                multipleDatesSeparator: ' - ',
-                autoClose: true,
-                onSelect: BF.items.datepickerValueChange
-            }).data('datepicker');
+    initDatepicker: (parent = $('.reveal')) => {
+        parent.find('.datepicker-field').removeData('datepicker');
+        var datepickers = parent.find('.datepicker-field').datepicker({
+            language: 'en', 
+            dateFormat: 'yyyy/mm/dd',
+            autoClose: true
+        });
 
-            if ($('#item_start_date').val()) {
-                var dates = [moment($('#item_start_date').val()).toDate()]
-                if ($('#item_end_date').val()) {
-                    dates.push(moment($('#item_end_date').val()).toDate())
-                } else {
-                    dates.push(moment($('#item_start_date').val()).toDate())
-                }
-                datepicker.selectDate(dates);
+        datepickers.each(function() {
+            var dateString = $(this).val();
+            if (dateString) {
+                var date = moment(dateString);
+
+                $(this).datepicker().data('datepicker').selectDate([date.toDate()])
             }
-        } else {
-            var datepicker = $('#start_end_date').datepicker({
-                language: 'en', 
-                dateFormat: 'yyyy/mm/dd',
-                range: false, 
-                toggleSelected: true,
-                multipleDatesSeparator: ' - ',
-                autoClose: true,
-                onSelect: BF.items.datepickerValueChange
-            }).data('datepicker');
-
-            if ($('#item_start_date').val()) {
-                var date = moment($('#item_start_date').val()).toDate();
-
-                datepicker.selectDate(date);
-            }
-        }
+        });
     },
     initForecastTables: () => {
         $('table.forecast-table').DataTable({
-            paging: false,
             ordering: false,
             info: false,
+            scrollY: 600,
+            deferRender: true,
             autoWidth: false,
+            scroller: true,
+            lengthChange: false,
+            ajax: {url: "forecast.json", dataSrc: ""},
+            createdRow: (row, data, dataIndex) => {
+                if (data.is_section) {
+                    $(row).attr('data-date', data.date);
+                    $(row).addClass('group');
+                    $(row).children('td:eq(0)').attr('colspan', 2);
+                    $(row).children('td:eq(1)').hide();
+                } else {
+                    $(row).attr('data-date', data.date);
+                    $(row).attr('data-id', data.item_id);
+                }
+            },
+            columns: [
+                { 
+                    data: "is_bill",
+                    render: (data, type, row) => {
+                        if (row.is_section) {
+                            return `<h2>${data}</h2>`;
+                        }
+
+                        if (data) {
+                            return '<i class="far fa-minus-square fa-2x"></i>';
+                        } else {
+                            return '<i class="far fa-plus-square fa-2x"></i>'
+                        }
+                    }
+                },
+                { 
+                    data: "day_of_month",
+                    render: (data, type, row) => {
+                        if (row.is_section) {
+                            return null;
+                        }
+                        return `<b>${row.day_of_month}</b>, ${row.day_of_week}`
+                    }
+                },
+                { 
+                    data: "name",
+                    render: (data, type, row) => {
+                        return `${data}<div class="row-actions"><i class="fas fa-plus"></i></div>`;
+                    }
+                },
+                { data: "category" },
+                { data: "amount_formatted" },
+                { data: "balance_formatted" }
+            ],
             columnDefs: [
                 { width: "50px", targets: 0 }
             ]
         });
-    },
-    datepickerValueChange: (formattedDate, date, inst) => {
-        let dates = formattedDate.split(' - ')
-        if (dates.length !== new Set(dates).size) {
-            $('#item_start_date').val(dates[0])
-            $('#item_end_date').val('')
-            inst.$el.val(dates[0])
-        } else {
-            $('#item_start_date').val(dates[0])
-            dates[1] ? $('#item_end_date').val(dates[1]) : $('#item_end_date').val('')
-        }
     }
 }

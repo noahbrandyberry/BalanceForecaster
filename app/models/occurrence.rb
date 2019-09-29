@@ -38,4 +38,19 @@ class Occurrence
     def category
         @item.category
     end
+
+    def form_source
+        {item_id: @item_id, name: @name, amount: @amount.to_s, is_bill: is_bill ? "1" : "0", note: @note, category: @category, new_date: @date.to_s, balance: balance.to_s}.to_a
+    end
+
+    def update params
+        changed_params = (params.to_h.symbolize_keys.to_a - form_source).to_h
+
+        if forecast_item
+            forecast_item.update_attributes(changed_params)
+        else
+            changed_params[:date] = @date
+            @item.forecast_items.create(changed_params)
+        end
+    end
 end
