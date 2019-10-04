@@ -13,7 +13,11 @@ class Occurrence
         @note = item.note
         @date = date
         @balance = nil
-    end  
+    end
+
+    def previous_occurrences
+        @item.occurrences_before(self)
+    end
 
     def source
         {item_id: @item_id, name: @name, amount: @amount, is_bill: is_bill, note: @note, category: @category, date: @date, balance: balance}
@@ -29,6 +33,10 @@ class Occurrence
 
     def real_amount
         @is_bill ? -(@amount.abs) : @amount.abs
+    end
+
+    def revert
+        @forecast_item.destroy if @forecast_item
     end
 
     def balance
@@ -51,6 +59,14 @@ class Occurrence
         else
             changed_params[:date] = @date
             @item.forecast_items.create(changed_params)
+        end
+    end
+
+    def delete
+        if forecast_item
+            forecast_item.update_attributes(deleted: true)
+        else
+            @item.forecast_items.create(date: @date, deleted: true)
         end
     end
 end

@@ -1,19 +1,15 @@
 <h1>Forecast</h1>
 
-<table class="forecast-table">
-    <thead>
-        <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
-</table>
+<div class="data-table-left-header">
+    <div>
+        <a data-open="createItemModal" class="button">New Transaction</a>
+    </div>
+
+    <div>
+        <button class="button secondary" id="refresh-table"><i class="fas fa-redo"></i></button>
+    </div>
+</div>
+
+<table class="forecast-table"></table>
 
 <%= render 'modal_form' %>

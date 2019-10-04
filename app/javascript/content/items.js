@@ -1,12 +1,14 @@
 BF.items = {
     init: () => {
+        BF.items.initDatepicker($('#createItemModal'))
+        BF.items.initForecastTables()
         BF.items.handlers.showPastChange()
         BF.items.handlers.forecastTableHover()
         BF.items.handlers.forecastTableClick()
         BF.items.handlers.forecastTableActionClick()
+        BF.items.handlers.forecastTableScroll()
+        BF.items.handlers.refreshForecastTable()
         BF.items.handlers.itemsTableClick()
-        BF.items.initDatepicker($('#createItemModal'))
-        BF.items.initForecastTables()
     },
     handlers: {
         showPastChange: () => {
@@ -59,6 +61,43 @@ BF.items = {
                 }
             });
         },
+        forecastTableScroll: () => {
+            $('.dataTables_scrollBody').on('scroll', function(event){
+                const element = event.target;
+
+                if (element.scrollHeight - element.scrollTop <= element.clientHeight + 100) {
+                    BF.items.forecast_dates.end.add('months', 1);
+
+                    if (!BF.items.forecast_refreshing) {
+                        $('.forecast-table').DataTable().ajax.url(`forecast.json?start_date=${BF.items.forecast_dates.start.format('YYYY-MM-DD')}&end_date=${BF.items.forecast_dates.end.format('YYYY-MM-DD')}`)
+                        BF.items.refreshForecastTable()
+                    }
+                } else if (element.scrollTop < 100) {
+                    BF.items.forecast_dates.start.subtract('months', 1);
+
+                    if (!BF.items.forecast_refreshing) {
+                        $('.forecast-table').DataTable().ajax.url(`forecast.json?start_date=${BF.items.forecast_dates.start.format('YYYY-MM-DD')}&end_date=${BF.items.forecast_dates.end.format('YYYY-MM-DD')}`)
+                        BF.items.refreshForecastTable()
+                    }
+                }
+            });
+        },
+        previousOccurrenceClick: () => {
+            $('#editOccurrenceModal #previous-occurrences tbody').on('click', 'tr', function(event){
+                $('#editOccurrenceModal').foundation('close');
+                var id = $(this).data('id');
+                var date = $(this).data('date');
+                $.get(`items/${id}/edit_occurrence/${date}`);
+            });
+        },
+        refreshForecastTable: () => {
+            $('body').on('click', '#refresh-table', function(){
+                var scrollTop = $('.dataTables_scrollBody').scrollTop();
+                $('.forecast-table').DataTable().ajax.reload( function() {
+                    $('.dataTables_scrollBody').scrollTop(scrollTop)
+                });
+            });
+        },
         itemsTableClick: () => {
             $('table.data-table.items-table tbody').on('click', 'tr', function(event){
                 if (!$(event.target).hasClass('button') && $(event.target).closest('.button').length === 0) {
@@ -86,16 +125,24 @@ BF.items = {
             }
         });
     },
+    refreshForecastTable: () => {
+        BF.items.forecast_refreshing = true
+        $('.forecast-table').DataTable().ajax.reload( function() {
+            BF.items.forecast_refreshing = false
+        }, false);
+    },
     initForecastTables: () => {
+        BF.items.forecast_dates = {start: moment('2019-06-01'), end: moment('2019-12-31')}
+        BF.items.forecast_refreshing = false;
         $('table.forecast-table').DataTable({
             ordering: false,
             info: false,
             scrollY: 600,
-            deferRender: true,
             autoWidth: false,
             scroller: true,
             lengthChange: false,
-            ajax: {url: "forecast.json", dataSrc: ""},
+            ajax: {url: `forecast.json?start_date=${BF.items.forecast_dates.start.format('YYYY-MM-DD')}&end_date=${BF.items.forecast_dates.end.format('YYYY-MM-DD')}`, dataSrc: ""},
+            dom: '<"grid-x grid-margin-x"<"cell large-6"><"cell large-6"f>>t',
             createdRow: (row, data, dataIndex) => {
                 if (data.is_section) {
                     $(row).attr('data-date', data.date);

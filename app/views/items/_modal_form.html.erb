@@ -1,5 +1,5 @@
 <div class="reveal" id="<%= @item.new_record? ? 'createItemModal' : 'editItemModal' %>" data-reveal>
-    <h1><%= @item.new_record? ? 'Create Item' : 'Edit Item' %></h1>
+    <h1><%= @item.new_record? ? 'Create Transaction' : 'Edit Transaction' %></h1>
     <%= render 'form', url: @item.new_record? ? account_items_path(@account) : account_item_path(@account, @item) %>
 
     <button class="close-button" data-close aria-label="Close modal" type="button">

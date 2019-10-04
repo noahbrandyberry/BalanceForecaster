@@ -43,10 +43,7 @@ h1, h2, h3 {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-
-        & > div {
-            margin-right: 1rem;
-        }
+        height: 100%;
     }
 
     .dataTable {
@@ -92,4 +89,8 @@ h1, h2, h3 {
 
 .datepicker-inline {
     margin-bottom: 1rem;
+}
+
+.button.tooltip {
+    cursor: pointer;
 }

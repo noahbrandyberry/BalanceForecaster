@@ -94,12 +94,13 @@ window.BF = {
             paging: false,
             info: false,
             autoWidth: false,
+            dom: '<"grid-x grid-margin-x"<"cell large-6"><"cell large-6"f>>t',
             columnDefs: [
                 { width: "50px", targets: 0 }
             ]
         });
 
-        var left_header = $('table.data-table').closest('.dataTables_wrapper').children('.row:first-child').children('.cell:first-child');
+        var left_header = $('table.data-table, table.forecast-table').closest('.dataTables_wrapper').children('.grid-x').children('.cell:first-child');
 
         $('.data-table-left-header').appendTo(left_header);
     },

@@ -1,0 +1,6 @@
+if ($('.forecast-table').length > 0) {
+    BF.items.refreshForecastTable()
+    $('#editOccurrenceModal').foundation('close');
+} else {
+    location.reload();
+}

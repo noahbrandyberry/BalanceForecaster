@@ -139,18 +139,21 @@ class Item < ApplicationRecord
                 occurrence_amount = amount
                 occurrence_is_bill = is_bill
                 affected_forecast_items = []
+                forecast_items.select { |forecast_item|  forecast_item.new_date && forecast_item.new_date <= max_date && forecast_item.date >= max_date }
+                forecast_item_max_date = (forecast_items.map(&:date) + [max_date]).max
 
-                while date <= max_date
+                while date <= forecast_item_max_date
                     forecast_item = forecast_items.find{|forecast_item| forecast_item.date === date}
+                    forecast_item_date = (forecast_item.try(:new_date).nil? ? date : forecast_item.new_date)
                     
                     occurrences << Occurrence.new(self, 
-                        (forecast_item.try(:new_date).nil? ? date : forecast_item.new_date), 
+                        forecast_item_date, 
                         (forecast_item.try(:name).nil? ? occurrence_name : forecast_item.name),
                         (forecast_item.try(:amount).nil? ? occurrence_amount : forecast_item.amount),
                         (forecast_item.try(:is_bill).nil? ? occurrence_is_bill : forecast_item.is_bill),
                         forecast_item,
                         affected_forecast_items.clone
-                    ) if date >= date_range.begin
+                    ) if forecast_item_date >= date_range.begin && forecast_item_date <= max_date && !forecast_item.try(:deleted)
 
                     if forecast_item.try(:continues)
                         occurrence_name = forecast_item.name if forecast_item.name

@@ -87,7 +87,7 @@
             </button>
 
             <% if !@item.new_record? %>
-                <%= link_to '<i class="fas fa-trash"></i>'.html_safe, account_item_path(@item.account, @item), method: :delete, data: { confirm: "Are you sure you want to delete this item?" }, remote: true, class: 'button alert' %>
+                <%= link_to '<i class="fas fa-trash"></i>'.html_safe, account_item_path(@item.account, @item), method: :delete, data: { confirm: "Are you sure you want to delete this transaction?" }, remote: true, class: 'button alert' %>
             <% end %>
         </div>
         <div class="grid-x medium-shrink">

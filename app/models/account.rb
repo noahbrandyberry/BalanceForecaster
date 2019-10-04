@@ -1,6 +1,7 @@
 class Account < ApplicationRecord
     belongs_to :user
     has_many :items
+    has_many :forecast_items, through: :items
     
     validates :user, presence: true
     validates :name, presence: true

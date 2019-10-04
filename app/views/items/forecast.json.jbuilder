@@ -8,7 +8,7 @@
         occurrence_json[:day_of_week] = occurrence.date.strftime("%A")
         occurrence_json[:day_of_month] = occurrence.date.day.ordinalize
         occurrence_json[:category] = occurrence.category.to_s
-        occurrence_json[:amount_formatted] = number_to_currency(occurrence.amount)
+        occurrence_json[:amount_formatted] = number_to_currency(occurrence.real_amount)
         occurrence_json[:balance_formatted] = number_to_currency(occurrence.balance)
         occurrence_json[:is_section] = false
 

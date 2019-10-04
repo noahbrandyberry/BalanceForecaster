@@ -1,7 +1,13 @@
 [data-group=items][data-view=forecast] {
     .dataTables_scrollBody {
         overflow-x: hidden !important;   
-        overflow-y: scroll !important;   
+        overflow-y: scroll !important;
+        border: 2px solid $primary-color;
+        border-radius: $global-radius;
+    }
+
+    .dataTables_scrollHead {
+        display: none;
     }
 
     .dataTables_paginate {
@@ -9,11 +15,11 @@
     }
 
     table.forecast-table {
+        user-select: none;
+
         thead {
             display: none;
         }
-
-        user-select: none;
 
         .row-actions {
             display: none;
@@ -91,9 +97,63 @@
 }
 
 #editOccurrenceModal {
-    #modifications-callout {
-        h2 {
-            font-size: 1.5rem;
+    .tabs {
+        border: none;
+        margin-bottom: 0.5rem;
+
+        .tabs-title {
+            a {
+                font-size: 0.9rem;
+                border-radius: $global-radius;
+                outline: none;
+                transition: all 0.25s ease;
+                margin-right: 0.5rem;
+            }
+
+            &.is-active {
+                a {
+                    background-color: $primary-color;
+                    color: $white;
+                }
+            }
+        }
+    }
+
+    .tabs-content {
+        border: none;
+
+        .tabs-panel {
+            padding: 0;
+        }
+    }
+
+    .tabs + .tabs-content {
+        border: 1px solid $light-gray;
+
+        .tabs-panel {
+            padding: 1rem;
+        }
+    }
+
+    .footer {
+        padding-top: 1rem;
+
+        .button {
+            margin: 0;
+        }
+    }
+
+    #previous-occurrences {
+        tbody {
+            tr {
+                transition: all 0.25s ease;
+                cursor: pointer;
+                
+                &:hover {
+                    background-color: $dark-gray;
+                    color: $white;
+                }
+            }
         }
     }
 }

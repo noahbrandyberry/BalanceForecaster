@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_account
-  before_action :set_item, only: [:show, :edit, :update, :destroy, :edit_occurrence, :update_occurrence]
+  before_action :set_item, only: [:show, :edit, :update, :destroy, :edit_occurrence, :update_occurrence, :delete_occurrence, :revert_occurrence]
   before_action :create_or_find_category, only: [:create, :update]
   before_action :authenticate_user!
 
@@ -60,7 +60,7 @@ class ItemsController < ApplicationController
   end
 
   def forecast
-    @forecast = @account.forecast(Date.today.prev_month.prev_month.beginning_of_month..Date.today.end_of_year)
+    @forecast = params[:start_date] && params[:end_date] ? @account.forecast(params[:start_date].to_date..params[:end_date].to_date) : []
     @item = @account.items.new
   end
 
@@ -78,8 +78,30 @@ class ItemsController < ApplicationController
     @occurrence.update(occurrence_params)
 
     respond_to do |format|
-      format.html { redirect_to account_items_path(@account), notice: 'Item was successfully updated.' }
+      format.html { redirect_to account_items_path(@account), notice: 'Occurrence was successfully updated.' }
       format.json { render :show, status: :ok, location: @occurrence }
+      format.js
+    end
+  end
+
+  def revert_occurrence
+    @occurrence = @item.occurrence_on params[:date].to_date
+    @occurrence.revert
+
+    respond_to do |format|
+      format.html { redirect_to account_items_path(@account), notice: 'Occurrence was successfully reverted.' }
+      format.json { render :show, status: :ok, location: @occurrence }
+      format.js
+    end
+  end
+
+  def delete_occurrence
+    @occurrence = @item.occurrence_on params[:date].to_date
+    @occurrence.delete
+
+    respond_to do |format|
+      format.html { redirect_to account_items_path(@account), notice: 'Occurrence was successfully destroyed.' }
+      format.json { head :no_content }
       format.js
     end
   end
