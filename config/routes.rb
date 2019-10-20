@@ -10,5 +10,11 @@ Rails.application.routes.draw do
     delete '/items/:id/delete_occurrence/:date', to: 'items#delete_occurrence', as: 'delete_occurrence'
   end
 
+  get '/contact', to: 'contact#contact', as: 'contact'
+  post '/submit_contact', to: 'contact#submit_contact', as: 'submit_contact'
+
+  get '/bug_report', to: 'contact#bug_report', as: 'bug_report'
+  post '/submit_bug_report', to: 'contact#submit_bug_report', as: 'submit_bug_report'
+
   root 'home#index'
 end

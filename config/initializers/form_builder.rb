@@ -46,7 +46,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
         super(attribute_name, *args, **object)
     end
 
-    def select(attribute_name, choices, options = {}, html_options = {})
+    def select(attribute_name, choices, options = {}, html_options = {}, **object)
         object[:id] = object[:id] ? object[:id] : "#{options[:prepend_id]}#{object_name}_#{attribute_name}"
 
         super(attribute_name, choices, options, html_options) + error_message(attribute_name, [], html_options)

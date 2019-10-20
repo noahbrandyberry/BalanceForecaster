@@ -1,19 +1,20 @@
-<div class="grid-container padding-vertical-1">
-    <% if notice %>
-        <div class="callout success flash-message" data-closable>
-            <p><%= notice %></p>
-            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    <% end %>
-
-    <% if alert %>
-        <div class="callout alert flash-message" data-closable>
-            <p><%= alert %></p>
-            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    <% end %>
-</div>
+<% if notice %>
+  <div class="grid-container padding-vertical-1">
+    <div class="callout success flash-message" data-closable>
+      <p><%= notice %></p>
+      <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+<% end %>
+<% if alert %>
+  <div class="grid-container padding-vertical-1">
+    <div class="callout alert flash-message" data-closable>
+      <p><%= alert %></p>
+      <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+<% end %>

@@ -1,15 +1,13 @@
 <%= form_for(@account) do |f| %>
-    <div class="field">
-        <%= f.label :name %>
-        <%= f.text_field :name, autofocus: true %>
-    </div>
-
-    <div class="field">
-        <%= f.label :balance %>
-        <%= f.number_field :balance, step: :any %>
-    </div>
-
-    <div class="actions">
-        <%= f.submit "Submit", class: 'button' %>
-    </div>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name, autofocus: true %>
+  </div>
+  <div class="field">
+    <%= f.label :balance %>
+    <%= f.number_field :balance, step: :any %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Submit", class: 'button' %>
+  </div>
 <% end %>

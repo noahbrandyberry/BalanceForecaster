@@ -1,15 +1,11 @@
 <h1>Forecast</h1>
-
 <div class="data-table-left-header">
-    <div>
-        <a data-open="createItemModal" class="button">New Transaction</a>
-    </div>
-
-    <div>
-        <button class="button secondary" id="refresh-table"><i class="fas fa-redo"></i></button>
-    </div>
+  <div>
+    <a data-open="createItemModal" class="button">New Transaction</a>
+  </div>
+  <div>
+    <button class="button secondary" id="refresh-table"><i class="fas fa-redo"></i></button>
+  </div>
 </div>
-
-<table class="forecast-table"></table>
-
+<table class="forecast-table" data-first-date="<%= @account.first_date.strftime("%Y-%m-%d") %>"></table>
 <%= render 'modal_form' %>

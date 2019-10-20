@@ -1,0 +1,35 @@
+<header id="hero">
+  <div class="grid-container">
+    <h1><small>Welcome to</small><br/>Balance Forecaster</h1>
+  </div>
+</header>
+<section id="featured-blocks">
+  <div class="grid-container">
+    <div class="grid-x grid-margin-x grid-margin-y outlined-grid">
+      <div class="cell large-6">
+        <h2>About Us</h2>
+        <p>
+          Balance Forecaster is a web based financial planner. The basic concept is that you can view a forecast of your balance based on your recurring transactions + any single transactions you enter.
+        </p>
+        <p>
+          The plan is to eventually pull in transactions automatically eventually by connecting to your bank account.
+        </p>
+        <p>
+          While this Web App is still in an early alpha phase, feel free to sign up and try it out by clicking the button below. Any feedback, bug reports, and/or feature suggestions are greatly appreciated (use the "Contact" button below).
+        </p>
+        <%= link_to 'Sign Up', new_registration_path('user'), class: 'button primary' %>
+        <%= link_to 'Contact', contact_path, class: 'button primary' %>
+      </div>
+      <div class="cell large-6">
+        <h2>Planned Features</h2>
+        <p><small><em>Features are not in chronological order.</em></small></p>
+        <ul>
+          <li>Calendar View</li>
+          <li>Category Forecast View</li>
+          <li>Bank Account Integration</li>
+        </ul>
+        <%= link_to 'Report Bug', bug_report_path, class: 'button primary' %>
+      </div>
+    </div>
+  </div>
+</section>

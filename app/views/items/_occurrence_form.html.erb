@@ -1,109 +1,95 @@
 <% previous_occurrences = @occurrence.previous_occurrences %>
-
 <div class="reveal" id="editOccurrenceModal" data-reveal>
-    <% if previous_occurrences.length > 0 || (@occurrence.forecast_item || @occurrence.affected_forecast_items.length > 0) %>
-        <ul class="tabs" data-tabs id="edit-occurrence-tabs">
-            <li class="tabs-title is-active"><a href="#edit" aria-selected="true">Edit Occurrence</a></li>
-            <% if previous_occurrences.length > 0 %>
-                <li class="tabs-title"><a href="#previous-occurrences">Previous Occurrences</a></li>
-            <% end %>
-        </ul>
-    <% end %>
-
-    <div class="tabs-content" data-tabs-content="edit-occurrence-tabs">
-        <div class="tabs-panel is-active" id="edit">
-            <h2>Edit Occurrence</h2>
-
-            <%= form_tag(account_update_occurrence_url, remote: true, html: {novalidate: "novalidate", data: {abide: ''}}) do |f| %>
-                <%= fields_for "occurrence", @occurrence do |f| %>
-
-                    <div class="field">
-                        <%= f.label :name %>
-                        <%= f.text_field :name, autofocus: true, required: true %>
-                    </div>
-
-                    <div class="grid-x grid-margin-x">
-                        <div class="cell shrink">
-                            <div class="field">
-                                <%= f.label :is_bill %>
-                                <%= f.switch :is_bill %>
-                            </div>
-                        </div>
-
-                        <div class="cell auto">
-                            <div class="field">
-                                <%= f.label :amount %>
-                                <%= f.number_field :amount, step: :any, required: true, data: {validator: 'greater_than', greater_than: 0} %>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid-x grid-margin-x">
-                        <div class="cell shrink">
-                            <div class="field">
-                                <%= f.label :continues %>
-                                <%= f.switch :continues, checked: @occurrence.forecast_item.try(:continues) %>
-                            </div>
-                        </div>
-
-                        <div class="cell auto">
-                            <div class="field">
-                                <%= f.label :date %>
-                                <%= f.text_field :date, required: true, class: 'datepicker-field', data: {inline: true} %>
-                            </div>
-                        </div>
-                    </div>
-                <% end %>
-                
-
-                <div class="grid-x footer">
-                    <div class="cell medium-auto">
-                        <button class="button secondary" data-close aria-label="Close" type="button">
-                            Close
-                        </button>
-
-                        <%= link_to '<i class="fas fa-trash"></i>'.html_safe, account_delete_occurrence_url, method: :delete, data: { confirm: "Are you sure you want to delete this occurrence?" }, remote: true, class: 'button alert' %>
-                        <% if @occurrence.forecast_item  %>
-                            <%= link_to '<i class="fas fa-undo"></i>'.html_safe, account_revert_occurrence_url, method: :post, data: { confirm: "Are you sure you want to revert this occurrence to the original?" }, remote: true, class: 'button hollow tooltip', title: 'Revert to original' %>
-                        <% end  %>
-                        <%= link_to '<i class="fas fa-sitemap"></i>'.html_safe, edit_account_item_url, remote: true, class: 'button secondary hollow tooltip', title: 'Edit Reccurring Transaction' %>
-                    </div>
-                    <div class="grid-x medium-shrink">
-                        <%= submit_tag "Submit", class: 'button' %>
-                    </div>
-                </div>
-            <% end %>
-        </div>
-
-        <% if previous_occurrences.length > 0 %>
-            <div class="tabs-panel" id="previous-occurrences">
-                <h2>Previous Occurrences</h2>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% previous_occurrences.each do |occurrence| %>
-                            <tr data-id="<%= occurrence.item_id %>" data-date="<%= occurrence.date %>">
-                                <td><%= occurrence.name %></td>
-                                <td><%= occurrence.date %></td>
-                                <td><%= number_to_currency(occurrence.real_amount) %></td>
-                                <td><%= number_to_currency(occurrence.balance) %></td>
-                            </tr>
-                        <% end %>
-                    </tbody>
-                </table>
+  <% if previous_occurrences.length > 0 || (@occurrence.forecast_item || @occurrence.affected_forecast_items.length > 0) %>
+    <ul class="tabs" data-tabs id="edit-occurrence-tabs">
+      <li class="tabs-title is-active"><a href="#edit" aria-selected="true">Edit Occurrence</a></li>
+      <% if previous_occurrences.length > 0 %>
+        <li class="tabs-title"><a href="#previous-occurrences">Previous Occurrences</a></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class="tabs-content" data-tabs-content="edit-occurrence-tabs">
+    <div class="tabs-panel is-active" id="edit">
+      <h2>Edit Occurrence</h2>
+      <%= form_tag(account_update_occurrence_url, remote: true, html: {novalidate: "novalidate", data: {abide: ''}}) do |f| %>
+        <%= fields_for "occurrence", @occurrence do |f| %>
+          <div class="field">
+            <%= f.label :name %>
+            <%= f.text_field :name, autofocus: true, required: true %>
+          </div>
+          <div class="grid-x grid-margin-x">
+            <div class="cell shrink">
+              <div class="field">
+                <%= f.label :is_bill %>
+                <%= f.switch :is_bill %>
+              </div>
             </div>
+            <div class="cell auto">
+              <div class="field">
+                <%= f.label :amount %>
+                <%= f.number_field :amount, step: :any, required: true, data: {validator: 'greater_than', greater_than: 0} %>
+              </div>
+            </div>
+          </div>
+          <div class="grid-x grid-margin-x">
+            <div class="cell shrink">
+              <div class="field">
+                <%= f.label :continues %>
+                <%= f.switch :continues, checked: @occurrence.forecast_item.try(:continues) %>
+              </div>
+            </div>
+            <div class="cell auto">
+              <div class="field">
+                <%= f.label :date %>
+                <%= f.text_field :date, required: true, class: 'datepicker-field', data: {inline: true} %>
+              </div>
+            </div>
+          </div>
         <% end %>
+        <div class="grid-x footer">
+          <div class="cell medium-auto">
+            <button class="button secondary" data-close aria-label="Close" type="button">
+              Close
+            </button>
+            <%= link_to '<i class="fas fa-trash"></i>'.html_safe, account_delete_occurrence_url, method: :delete, data: { confirm: "Are you sure you want to delete this occurrence?" }, remote: true, class: 'button alert' %>
+            <% if @occurrence.forecast_item  %>
+              <%= link_to '<i class="fas fa-undo"></i>'.html_safe, account_revert_occurrence_url, method: :post, data: { confirm: "Are you sure you want to revert this occurrence to the original?" }, remote: true, class: 'button hollow tooltip', title: 'Revert to original' %>
+            <% end  %>
+            <%= link_to '<i class="fas fa-sitemap"></i>'.html_safe, edit_account_item_url, remote: true, class: 'button secondary hollow tooltip', title: 'Edit Reccurring Transaction' %>
+          </div>
+          <div class="grid-x medium-shrink">
+            <%= submit_tag "Submit", class: 'button' %>
+          </div>
+        </div>
+      <% end %>
     </div>
-
-    <button class="close-button" data-close aria-label="Close modal" type="button">
-        <span aria-hidden="true">&times;</span>
-    </button>
+    <% if previous_occurrences.length > 0 %>
+      <div class="tabs-panel" id="previous-occurrences">
+        <h2>Previous Occurrences</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% previous_occurrences.each do |occurrence| %>
+              <tr data-id="<%= occurrence.item_id %>" data-date="<%= occurrence.date %>">
+                <td><%= occurrence.name %></td>
+                <td><%= occurrence.date %></td>
+                <td><%= number_to_currency(occurrence.real_amount) %></td>
+                <td><%= number_to_currency(occurrence.balance) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
+  <button class="close-button" data-close aria-label="Close modal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>

@@ -1,3 +1,17 @@
+#hero {
+  padding: 3rem 0;
+  background-color: $primary-color;
+  color: $white;
+
+  h1,
+  h2,
+  h3 {
+    small {
+      color: $medium-gray;
+    }
+  }
+}
+
 .site-navigation {
-    background-color: $topbar-background;
+  background-color: $topbar-background;
 }

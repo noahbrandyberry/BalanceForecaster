@@ -1,51 +1,47 @@
 <h1>Transactions</h1>
-
 <div class="data-table-left-header">
-    <div>
-        <a data-open="createItemModal" class="button">New Transaction</a>
+  <div>
+    <a data-open="createItemModal" class="button">New Transaction</a>
+  </div>
+  <div>
+    <label for="show_past">Show Past</label>
+    <div class="switch large">
+      <input class="switch-input toggle-fields" type="checkbox" data-cookie="<%= "show_past_#{@account.id}" %>" <%= 'checked' if show_past? @account, @items %> id="show_past" data-toggle-true="<%= @past_items.ids.map{|i| "item-#{i}"}.join(' ') %>">
+      <label class="switch-paddle" for="show_past">
+        <span class="switch-active" aria-hidden="true">Yes</span>
+        <span class="switch-inactive" aria-hidden="true">No</span>
+      </label>
     </div>
-    <div>
-        <label for="show_past">Show Past</label>
-        <div class="switch large">
-            <input class="switch-input toggle-fields" type="checkbox" data-cookie="<%= "show_past_#{@account.id}" %>" <%= 'checked' if show_past? @account, @items %> id="show_past" data-toggle-true="<%= @past_items.ids.map{|i| "item-#{i}"}.join(' ') %>">
-            <label class="switch-paddle" for="show_past">
-                <span class="switch-active" aria-hidden="true">Yes</span>
-                <span class="switch-inactive" aria-hidden="true">No</span>
-            </label>
-        </div>
-    </div>
+  </div>
 </div>
-
-
 <table class="data-table items-table">
-    <thead>
-        <tr>
-            <th data-orderable="false"></th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Repeats</th>
-            <th data-orderable="false">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% @items.each do |item| %>
-            <tr data-date="<%= item.start_date %>" data-id="<%= item.id %>" id="item-<%= item.id %>">
-                <td><%= item.is_bill ? '<i class="far fa-minus-square fa-2x"></i>'.html_safe : '<i class="far fa-plus-square fa-2x"></i>'.html_safe %></td>
-                <td><%= item.start_date %></td>
-                <td><%= item.name %></td>
-                <td><%= item.category %></td>
-                <td data-order="<%= item.amount %>" data-search="<%= number_with_precision(item.amount, precision: 2) %>"><%= number_to_currency(item.amount) %></td>
-                <td data-order="<%= item.repeat ? item.repeat_frequency.send(item.repeat_type) : 0 %>">
-                    <u class="tooltip" title="<%= item.past? ? "This item has finished recurring. It's last occurrence was on #{item.previous_occurence}" : "This item's next occurrence will be on #{item.next_occurence}" %>">
-                        <%= item.display_repeat_details %>
-                    </u>
-                </td>
-                <td><%= link_to '<i class="fas fa-trash"></i>'.html_safe, account_item_path(@account, item), method: :delete, data: { confirm: "Are you sure you want to delete this item?" }, class: 'button alert no-margin' %></td>
-            </tr>
-        <% end %>
-    </tbody>
+  <thead>
+    <tr>
+      <th data-orderable="false"></th>
+      <th>Date</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Amount</th>
+      <th>Repeats</th>
+      <th data-orderable="false">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @items.each do |item| %>
+      <tr data-date="<%= item.start_date %>" data-id="<%= item.id %>" id="item-<%= item.id %>">
+        <td><%= item.is_bill ? '<i class="far fa-minus-square fa-2x"></i>'.html_safe : '<i class="far fa-plus-square fa-2x"></i>'.html_safe %></td>
+        <td><%= item.start_date %></td>
+        <td><%= item.name %></td>
+        <td><%= item.category %></td>
+        <td data-order="<%= item.amount %>" data-search="<%= number_with_precision(item.amount, precision: 2) %>"><%= number_to_currency(item.amount) %></td>
+        <td data-order="<%= item.repeat ? item.repeat_frequency.send(item.repeat_type) : 0 %>">
+          <u class="tooltip" title="<%= item.past? ? "This item has finished recurring. It's last occurrence was on #{item.previous_occurence}" : "This item's next occurrence will be on #{item.next_occurence}" %>">
+            <%= item.display_repeat_details %>
+          </u>
+        </td>
+        <td><%= link_to '<i class="fas fa-trash"></i>'.html_safe, account_item_path(@account, item), method: :delete, data: { confirm: "Are you sure you want to delete this transaction?" }, class: 'button alert no-margin tooltip', title: 'Delete Transaction' %></td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
-
 <%= render 'modal_form' %>

@@ -65,6 +65,8 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import 'components/forms';
 
 // Views
+@import 'views/home';
+@import 'views/contact';
 @import 'views/forecast';
 @import 'views/items';
 

@@ -3,6 +3,7 @@
         $('.forecast-table').DataTable().ajax.reload( function() {
             $('.dataTables_scrollBody').scrollTop(scrollTop)
         });
+        $('.forecast-table').attr('data-first-date', '<%= @account.first_date.strftime("%Y-%m-%d") %>');
         $('#editOccurrenceModal').foundation('close');
     } else {
         location.reload();

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_06_015821) do
+ActiveRecord::Schema.define(version: 2019_10_10_020116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_015821) do
     t.decimal "balance", precision: 8, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "inactive", default: false
   end
 
   create_table "categories", id: :serial, force: :cascade do |t|
@@ -57,7 +58,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_015821) do
     t.boolean "is_bill", default: false, null: false
     t.boolean "repeat", default: false, null: false
     t.integer "repeat_frequency"
-    t.string "repeat_type"
+    t.integer "repeat_type"
     t.decimal "amount", precision: 8, scale: 2, default: "0.0", null: false
     t.date "start_date", null: false
     t.date "end_date"
@@ -76,6 +77,21 @@ ActiveRecord::Schema.define(version: 2019_08_06_015821) do
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "preferred_account"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|

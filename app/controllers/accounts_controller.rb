@@ -3,7 +3,7 @@ class AccountsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @accounts = current_user.accounts.order(:name)
+    @accounts = current_user.accounts.active_accounts.order(:name)
   end
 
   def show
@@ -44,9 +44,9 @@ class AccountsController < ApplicationController
   end
 
   def destroy
-    @account.destroy
+    @account.make_inactive
     respond_to do |format|
-      format.html { redirect_to accounts_url, notice: 'Account was successfully destroyed.' }
+      format.html { redirect_to accounts_url, notice: 'Account was successfully removed.' }
       format.json { head :no_content }
     end
   end

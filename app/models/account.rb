@@ -6,6 +6,11 @@ class Account < ApplicationRecord
     validates :user, presence: true
     validates :name, presence: true
     validates :balance, presence: true
+    scope :active_accounts, -> () { where(inactive: false) }
+
+    def make_inactive
+        update_attributes(inactive: true)
+    end
 
     def available_transfer_accounts
         user.accounts.where.not(id: id)
@@ -14,6 +19,13 @@ class Account < ApplicationRecord
     def to_s
         name
     end
+
+    def first_date
+        item_date = items.order(:start_date).limit(1).first.start_date
+        forecast_item_date = forecast_items.order(:new_date).limit(1).first.date
+        [item_date, forecast_item_date].min
+    end
+    
 
     def forecast date_range
         occurrences = []

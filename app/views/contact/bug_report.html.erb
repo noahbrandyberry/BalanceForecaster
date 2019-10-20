@@ -1,0 +1,68 @@
+<header id="hero">
+  <div class="grid-container">
+    <h1>Report a Bug</h1>
+  </div>
+</header>
+
+<section id="form-container">
+  <div class="grid-container">
+    <%= form_for(@bug_report_form, url: submit_bug_report_path) do |f| %>
+      <div class="grid-x grid-margin-x">
+        <div class="cell large-6">
+          <div class="grid-x grid-margin-x">
+            <div class="cell large-6">
+              <div class="field">
+                <%= f.label :first_name %>
+                <%= f.text_field :first_name, autofocus: true %>
+              </div>
+            </div>
+            <div class="cell large-6">
+              <div class="field">
+                <%= f.label :last_name %>
+                <%= f.text_field :last_name %>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <%= f.label :email %>
+            <%= f.email_field :email %>
+          </div>
+          
+          <div class="grid-x grid-margin-x">
+            <div class="cell large-6">
+              <div class="field">
+                <%= f.label :page, 'Page with Bug' %>
+                <%= f.select :page, options_for_select(["Login", "Sign Up", "Reset Password", "Contact", "Accounts", "Transactions", "Forecast"]), {prompt: "-- Select Page --"}, required: true %>
+              </div>
+            </div>
+            <div class="cell large-6">
+              <div class="field">
+                <%= f.label :screenshot %>
+
+                <%= f.label :screenshot, class: 'button primary hollow' do %>
+                  Choose File
+                  <%= f.file_field :screenshot, class: 'hide', :accept => 'image/*' %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <%= f.label :description %>
+            <%= f.text_area :description %>
+          </div>
+
+          <div class="actions">
+            <%= f.submit "Submit", class: 'button' %>
+          </div>
+        </div>
+        <div class="cell large-6">
+          <p>
+            We're sorry that you're experiencing a bug while using our app. Please provide as much information on the bug you are experiencing and we will work on fixing it as soon as possible.
+          </p>
+        </div>
+      </div>
+    <% end %>
+  <div>
+</section>

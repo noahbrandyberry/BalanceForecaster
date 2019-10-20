@@ -1,0 +1,49 @@
+<header id="hero">
+  <div class="grid-container">
+    <h1>Contact Us</h1>
+  </div>
+</header>
+
+<section id="form-container">
+  <div class="grid-container">
+    <%= form_for(@contact_form, url: submit_contact_path) do |f| %>
+      <div class="grid-x grid-margin-x">
+        <div class="cell large-6">
+          <div class="grid-x grid-margin-x">
+            <div class="cell large-6">
+              <div class="field">
+                <%= f.label :first_name %>
+                <%= f.text_field :first_name, autofocus: true %>
+              </div>
+            </div>
+            <div class="cell large-6">
+              <div class="field">
+                <%= f.label :last_name %>
+                <%= f.text_field :last_name %>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <%= f.label :email %>
+            <%= f.email_field :email %>
+          </div>
+
+          <div class="field">
+            <%= f.label :message %>
+            <%= f.text_area :message %>
+          </div>
+
+          <div class="actions">
+            <%= f.submit "Submit", class: 'button' %>
+          </div>
+        </div>
+        <div class="cell large-6">
+          <p>
+            Feel free to contact us with any questions you may have concerning this application. You can also request status updates on features or even suggest improvements/features of your own. We look forward to hearing from you!
+          </p>
+        </div>
+      </div>
+    <% end %>
+  <div>
+</section>

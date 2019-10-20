@@ -8,4 +8,14 @@ class User < ApplicationRecord
   
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  define_model_callbacks :deliver
+  include MailForm::Delivery
+
+  def headers
+    {
+      :to => "info@balanceforecaster.com",
+      :subject => "User created an account"
+    }
+  end
 end
