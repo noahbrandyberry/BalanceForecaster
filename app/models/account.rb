@@ -21,9 +21,14 @@ class Account < ApplicationRecord
     end
 
     def first_date
-        item_date = items.order(:start_date).limit(1).first.start_date
-        forecast_item_date = forecast_items.order(:new_date).limit(1).first.date
-        [item_date, forecast_item_date].min
+        item_date = items.order(:start_date).limit(1).first.try(:start_date)
+        forecast_item_date = forecast_items.order(:new_date).limit(1).first.try(:date)
+
+        return [item_date, forecast_item_date].min if item_date && forecast_item_date
+        return item_date if item_date
+        return forecast_item_date if forecast_item_date
+
+        return Date.today
     end
     
 
