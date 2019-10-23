@@ -217,5 +217,16 @@ BF.items = {
         { width: "50px", targets: 0 }
       ]
     });
+
+
+    $('.forecast-table').DataTable().ajax.reload(function (data) {
+      const pastOccurrences = data.filter(occurrence => moment().isAfter(occurrence.date));
+      const occurrence = pastOccurrences[pastOccurrences.length - 1]
+
+      const occurrenceElement = $('[data-date="' + moment(occurrence.date).format('YYYY-MM-DD') + '"]');
+      if (occurrenceElement.length > 0) {
+        $('.dataTables_scrollBody').scrollTop(occurrenceElement.offset().top)
+      }
+    });
   }
 }

@@ -1,0 +1,33 @@
+<div class="grid-x align-center">
+  <div class="cell large-10">
+    <div class="grid-x">
+      <div class="cell auto">
+        <h1>Categories</h1>
+      </div>
+      <div class="cell shrink">
+        <%= link_to 'New Category', new_category_path, class: 'button' %>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Budget</th>
+          <th style="width: 120px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @categories.each do |category| %>
+          <tr>
+            <td><%= category.name %></td>
+            <td><%= number_to_currency(category.budget) %></td>
+            <td>
+              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_category_path(category), class: 'button hollow no-margin tooltip', title: 'Edit Category' %>
+              <%= link_to '<i class="fas fa-trash"></i>'.html_safe, category_path(category), method: :delete, data: { confirm: "Are you sure you want to delete this category?" }, class: 'button alert no-margin tooltip', title: 'Delete Category' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

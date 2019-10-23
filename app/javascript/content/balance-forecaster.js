@@ -11,11 +11,15 @@ window.BF = {
     BF.initTables()
   },
   destroy: () => {
-    if ($('#start_end_date').datepicker().data('datepicker')) {
-      $('#start_end_date').datepicker().data('datepicker').destroy();
-    }
+    $('.datepicker-field').each(function() {
+      if ($(this).datepicker().data('datepicker')) {
+        $(this).datepicker().data('datepicker').destroy();
+      }
+    });
 
-    var dataTable = $('.data-table').DataTable();
+    var dataTable = $('.data-table, .forecast-table').DataTable();
+
+    $('.data-table-left-header').appendTo('body')
 
     if (dataTable !== null) {
       dataTable.destroy();
