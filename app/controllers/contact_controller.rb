@@ -7,7 +7,7 @@ class ContactController < ApplicationController
 
   def submit_contact
     @contact_form = ContactForm.new(contact_params)
-    if @contact_form.deliver
+    if verify_recaptcha(model: @contact_form) && @contact_form.deliver
       redirect_to contact_path, notice: 'Thank you for your message. We will contact you soon!'
     else
       flash.now[:error] = 'Cannot send message.'
@@ -21,7 +21,7 @@ class ContactController < ApplicationController
 
   def submit_bug_report
     @bug_report_form = BugReportForm.new(bug_report_params)
-    if @bug_report_form.deliver
+    if verify_recaptcha(model: @bug_report_form) && @bug_report_form.deliver
       redirect_to bug_report_path, notice: 'Thank you for reporting this bug. We will work on fixing this ASAP!'
     else
       flash.now[:error] = 'Cannot report bug.'
