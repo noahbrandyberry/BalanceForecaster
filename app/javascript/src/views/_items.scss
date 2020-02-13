@@ -21,3 +21,11 @@
     }
   }
 }
+
+[data-group="items"][data-view="chart"] {
+  .graph-tabs-content {
+    input {
+      margin: 0;
+    }
+  }
+}

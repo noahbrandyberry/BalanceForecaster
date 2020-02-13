@@ -5,7 +5,7 @@ if ($('#editOccurrenceModal').length > 0) {
 $('body').append('<%= escape_javascript(render 'occurrence_form') %>');
 $('#editOccurrenceModal').foundation();
 $('#editOccurrenceModal').foundation('open');
-BF.items.initDatepicker($('#editOccurrenceModal'))
+BF.initDatepicker($('#editOccurrenceModal'))
 BF.initHiddenFields()
 BF.initTooltips()
 BF.items.handlers.previousOccurrenceClick()

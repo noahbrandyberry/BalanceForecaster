@@ -11,6 +11,6 @@
     }
 <% else %>
     $('#editItemModal').find('form').html('<%= escape_javascript(render 'form', url: account_items_path(@account)) %>');
-    BF.items.initDatepicker($('#editItemModal'));
+    BF.initDatepicker($('#editItemModal'));
     BF.initHiddenFields()
 <% end %>

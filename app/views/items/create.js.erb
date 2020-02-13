@@ -8,13 +8,13 @@
         $('#createItemModal').find('form').html('<%= escape_javascript(render 'form', url: account_items_path(@account)) %>');
         $('#createItemModal').foundation('close');
         $('.forecast-table').attr('data-first-date', '<%= @account.first_date.strftime("%Y-%m-%d") %>');
-        BF.items.initDatepicker($('#createItemModal'));
+        BF.initDatepicker($('#createItemModal'));
         BF.initHiddenFields()
     } else {
         location.reload();
     }
 <% else %>
     $('#createItemModal').find('form').html('<%= escape_javascript(render 'form', url: account_items_path(@account)) %>');
-    BF.items.initDatepicker($('#createItemModal'));
+    BF.initDatepicker($('#createItemModal'));
     BF.initHiddenFields()
 <% end %>

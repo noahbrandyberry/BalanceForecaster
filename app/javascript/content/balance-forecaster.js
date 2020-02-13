@@ -9,6 +9,7 @@ window.BF = {
     BF.initTooltips()
     BF.initViews()
     BF.initTables()
+    BF.initDatepicker($('body'))
   },
   destroy: () => {
     $('.datepicker-field').each(function() {
@@ -125,6 +126,26 @@ window.BF = {
     var left_header = $('table.data-table, table.forecast-table').closest('.dataTables_wrapper').children('.grid-x').children('.cell:first-child');
 
     $('.data-table-left-header').appendTo(left_header);
+  },
+  initDatepicker: (parent = $('.reveal')) => {
+    parent.find('.datepicker-field').removeData('datepicker');
+    var datepickers = parent.find('.datepicker-field').datepicker({
+      language: 'en',
+      dateFormat: 'yyyy/mm/dd',
+      autoClose: true,
+      onSelect: function(fd, d, picker) {
+        picker.$el.change();
+      }
+    });
+
+    datepickers.each(function () {
+      var dateString = $(this).val();
+      if (dateString) {
+        var date = moment(dateString);
+
+        $(this).datepicker().data('datepicker').selectDate([date.toDate()])
+      }
+    });
   },
   initViews: () => {
     let group = $('body').data('group');

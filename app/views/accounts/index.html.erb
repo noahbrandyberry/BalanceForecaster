@@ -14,7 +14,7 @@
           <th>Name</th>
           <th>Starting Balance</th>
           <th>Today's Balance</th>
-          <th style="width: 220px;">Actions</th>
+          <th style="width: 280px;">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +24,7 @@
             <td><%= number_to_currency(account.balance) %></td>
             <td><%= number_to_currency(account.balance_on) %></td>
             <td>
+              <%= link_to '<i class="fas fa-chart-line"></i>'.html_safe, account_chart_path(account), class: 'button secondary hollow no-margin tooltip', title: 'View Charts' %>
               <%= link_to '<i class="fas fa-cloud-sun"></i>'.html_safe, account_forecast_path(account), class: 'button secondary no-margin tooltip', title: 'View Forecast' %>
               <%= link_to '<i class="fas fa-list"></i>'.html_safe, account_items_path(account), class: 'button primary no-margin tooltip', title: 'View Transactions' %>
               <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_account_path(account), class: 'button hollow no-margin tooltip', title: 'Edit Account' %>

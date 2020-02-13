@@ -33,6 +33,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'devise'
 gem 'switchery-rails'
 gem 'simplecov', require: false, group: :test
+gem "chartkick"
+gem 'groupdate'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

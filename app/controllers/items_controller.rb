@@ -64,6 +64,35 @@ class ItemsController < ApplicationController
     @item = @account.items.new
   end
 
+  def chart
+    respond_to do |format|
+      format.html do
+        @from = '2020-01-01'
+        @to = '2020-12-31'
+        @charts = {'area' => 'month', 'column' => 'day'}
+        @groups = ['day', 'week', 'month']
+      end
+      format.json do 
+        date_range = params[:from].to_date..params[:to].to_date
+        case params[:group]
+        when 'month'
+          date_format = "%B %Y"
+        when 'week'
+          date_format = "%b %e %Y"
+        else
+          date_format = "%b %e"
+        end
+        @forecast = @account.forecast(date_range)
+        @chart = @forecast.send("group_by_#{params[:group]}", &:date).map do |date, occurrences| 
+          last_occurrence = occurrences.select{|occurrence| occurrence.date === date}
+          [date.strftime(date_format), last_occurrence.last.try(:balance)||occurrences.first.try(:balance)] 
+        end
+
+        render json: @chart 
+      end
+    end
+  end
+
   def edit_occurrence
     if @item.repeat?
       @occurrence = @item.occurrence_on params[:date].to_date

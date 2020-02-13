@@ -1,0 +1,39 @@
+<h1>Charts</h1>
+
+<ul class="tabs" data-tabs id="graph-tabs">
+  <% @charts.each_with_index do |(name, default_group), index| %>
+    <li class="tabs-title <%= 'is-active' if index === 0 %>"><a href="#<%= name %>"><%= name.humanize %></a></li>
+  <% end %>
+</ul>
+
+<div class="tabs-content graph-tabs-content" data-tabs-content="graph-tabs">
+  <% @charts.each_with_index do |(name, default_group), index| %>
+    <div class="tabs-panel <%= 'is-active' if index === 0 %>" id="<%= name %>">
+      <div class="grid-x align-middle grid-margin-x">
+        <div class="cell shrink">
+          <select class="group-field">
+            <% @groups.each do |group| %>
+              <option value="<%= group %>" <%= 'selected' if group === default_group %>><%= group.humanize %></option>
+            <% end %>
+          </select>
+        </div>
+        <div class="cell auto"></div>
+        <div class="cell shrink">
+          From:
+        </div>
+        <div class="cell shrink">
+          <input type="date" name="from" class="datepicker-field date-field" data-date-format="yyyy-mm-dd" value="<%= @from %>">
+        </div>
+        <div class="cell shrink">
+          To:
+        </div>
+        <div class="cell shrink">
+          <input type="date" name="to" class="datepicker-field date-field" data-date-format="yyyy-mm-dd" value="<%= @to %>">
+        </div>
+      </div>
+      <%= send "#{name}_chart", account_chart_path(@account, format: :json, group: default_group, from: @from, to: @to), prefix: "$", thousands: ",", round: 2, zeros: true, colors: ['#09519e'], id: "chart-#{name}" %>
+    </div>
+  <% end %>
+</div>
+
+

@@ -1,6 +1,5 @@
 BF.items = {
   init: () => {
-    BF.items.initDatepicker($('#createItemModal'))
     BF.items.initForecastTables()
     BF.items.handlers.showPastChange()
     BF.items.handlers.forecastTableHover()
@@ -9,8 +8,15 @@ BF.items = {
     BF.items.handlers.forecastTableScroll()
     BF.items.handlers.refreshForecastTable()
     BF.items.handlers.itemsTableClick()
+    BF.items.handlers.groupChange()
   },
   handlers: {
+    groupChange: () => {
+      $('.tabs-panel').on('change', '.group-field, .date-field', function () {
+        const tab = $(this).closest('.tabs-panel');
+        BF.items.chartUpdate(tab)
+      });
+    },
     showPastChange: () => {
       $('#show_past').on('change', function () {
         var cookie_name = $(this).data('cookie')
@@ -105,25 +111,7 @@ BF.items = {
       });
     }
   },
-  initDatepicker: (parent = $('.reveal')) => {
-    parent.find('.datepicker-field').removeData('datepicker');
-    var datepickers = parent.find('.datepicker-field').datepicker({
-      language: 'en',
-      dateFormat: 'yyyy/mm/dd',
-      autoClose: true
-    });
-
-    datepickers.each(function () {
-      var dateString = $(this).val();
-      if (dateString) {
-        var date = moment(dateString);
-
-        $(this).datepicker().data('datepicker').selectDate([date.toDate()])
-      }
-    });
-  },
   scrollForecastUp: () => {
-    console.log('up')
     BF.items.forecast_dates.start.subtract(1, 'months');
     BF.items.forecast_dates.end.subtract(1, 'months');
 
@@ -155,6 +143,12 @@ BF.items = {
 
       BF.items.forecast_refreshing = false
     }, false);
+  },
+  chartUpdate: (tab) => {
+    const id = tab.attr('id');
+    const chart = Chartkick.charts['chart-' + id]
+    chart.dataSource = window.location.pathname + '.json?from=' + tab.find('.date-field[name="from"]').val() + '&to=' + tab.find('.date-field[name="to"]').val() + '&group=' + tab.find('.group-field').val()
+    chart.refreshData()
   },
   initForecastTables: () => {
     BF.items.forecast_dates = { start: moment('2019-08-01'), end: moment('2019-10-31') }
