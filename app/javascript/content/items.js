@@ -151,7 +151,7 @@ BF.items = {
     chart.refreshData()
   },
   initForecastTables: () => {
-    BF.items.forecast_dates = { start: moment('2019-08-01'), end: moment('2019-10-31') }
+    BF.items.forecast_dates = { start: moment().startOf('month'), end: moment().endOf('month') }
     BF.items.forecast_refreshing = false;
     $('table.forecast-table').DataTable({
       ordering: false,
