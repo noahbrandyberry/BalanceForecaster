@@ -16,7 +16,7 @@
     "foundation-sites": "^6.7.4",
     "jquery": "^3.6.0",
     "js-cookie": "^3.0.1",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "motion-ui": "^2.0.3",
     "tooltipster": "^4.2.8",
     "turbolinks": "^5.2.0"
